@@ -41,7 +41,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 跨域预检请求
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 首页和登录页面
-                .antMatchers("/").permitAll().antMatchers("/login").permitAll().antMatchers("/logon").permitAll()
+                .antMatchers("/").permitAll().antMatchers("/user/login").permitAll().antMatchers("/logon").permitAll()
+                .antMatchers("/user/info").permitAll()
                 // 其它所欲请求要求身份认证
                 .anyRequest().authenticated();
         // 退出登录处理器

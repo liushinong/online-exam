@@ -11,12 +11,15 @@ import com.exam.onlineexamapi.service.UserService;
 import com.exam.onlineexamapi.utils.PasswordUtils;
 import com.exam.onlineexamapi.utils.SecurityUtils;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class LoginController {
@@ -30,7 +33,7 @@ public class LoginController {
     @Resource
     AuthenticationManager authenticationManager;
 
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public RestResult login(@RequestBody LoginDTO loginDTO, HttpServletRequest request) {
         String username = loginDTO.getUsername();
         String password = loginDTO.getPassword();
@@ -45,6 +48,16 @@ public class LoginController {
         // 系统登录认证
         JwtAuthenticationToken token = SecurityUtils.login(request, username, password, authenticationManager);
         return new RestResultBuilder<>().success(token);
+    }
+
+    @GetMapping("/user/info")
+    public RestResult getInfo() {
+        Map map = new HashMap();
+        map.put("roles", new String[]{"admin"});
+        map.put("introduction", "I am a super administrator");
+        map.put("avatar", "https://xuekaikai.oss-cn-shanghai.aliyuncs.com/campus_navigatic/sXWNh3ynRPx.jpg");
+        map.put("name", "Super Admin");
+        return new RestResultBuilder<>().success(map);
     }
 
     @PostMapping("/logon")
