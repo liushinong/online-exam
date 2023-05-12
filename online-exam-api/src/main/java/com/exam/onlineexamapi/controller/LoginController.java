@@ -49,6 +49,6 @@ public class LoginController {
 
     @PostMapping("/logon")
     public RestResult logon(@RequestBody LoginDTO loginDTO) {
-        return new RestResultBuilder<>().success(loginService.logon(loginDTO));
+        return loginService.logon(loginDTO);
     }
 }

@@ -7,4 +7,7 @@
     <select id="findByName" resultType="com.exam.onlineexamapi.domain.entity.User">
         select * from t_user where user_name = #{username}
     </select>
+    <select id="findByPage" resultType="com.exam.onlineexamapi.domain.entity.User">
+        select * from t_user where role = 1
+    </select>
 </mapper>
