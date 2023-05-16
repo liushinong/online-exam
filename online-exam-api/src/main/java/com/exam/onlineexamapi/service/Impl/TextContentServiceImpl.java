@@ -33,11 +33,16 @@ public class TextContentServiceImpl implements TextContentService {
 
     @Override
     public TextContent findById(Long id) {
-        return null;
+        return textContentMapper.findById(id);
     }
 
     @Override
     public PageResult findByPage(PageRequest pageRequest) {
         return null;
+    }
+
+    @Override
+    public Integer updateById(TextContent textContent) {
+        return textContentMapper.updateById(textContent);
     }
 }

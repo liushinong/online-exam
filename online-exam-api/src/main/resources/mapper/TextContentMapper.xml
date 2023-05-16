@@ -8,4 +8,14 @@
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         insert into t_text_content(content, create_time) values (#{content}, #{createTime})
     </insert>
+    <update id="updateById">
+        update t_text_content set
+        <if test="content != null">
+            content = #{content}
+        </if>
+        where id = #{id}
+    </update>
+    <select id="findById" resultType="com.exam.onlineexamapi.domain.entity.TextContent">
+        select * from t_text_content where id = #{id}
+    </select>
 </mapper>

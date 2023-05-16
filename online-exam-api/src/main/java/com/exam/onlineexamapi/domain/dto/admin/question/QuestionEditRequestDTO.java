@@ -13,7 +13,7 @@ public class QuestionEditRequestDTO {
     private Integer userId;
     private Integer id;
     private Integer questionType;
-    private Integer subjectId;
+    private Long subjectId;
     private String title;
     private List<QuestionEditItemRequestDTO> items;
     private String analyze;

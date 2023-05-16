@@ -6,4 +6,6 @@ import com.exam.onlineexamapi.domain.entity.Question;
 public interface QuestionService extends CurdService<Question>{
 
     Integer insertQuestion(QuestionEditRequestDTO model);
+
+    Integer updateQuestion(QuestionEditRequestDTO model);
 }

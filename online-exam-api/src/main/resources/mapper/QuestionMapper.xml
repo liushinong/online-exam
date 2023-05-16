@@ -10,4 +10,54 @@
         values (#{questionType}, #{subjectId}, #{score}, #{gradeLevel}, #{difficult}, #{correct}, #{infoTextContentId},
                 #{createUser})
     </insert>
+    <update id="updateById">
+        update t_question
+        <set>
+            <if test="questionType != null">
+                question_type = #{questionType},
+            </if>
+            <if test="subjectId != null">
+                subject_id = #{subjectId},
+            </if>
+            <if test="score != null">
+                score = #{score},
+            </if>
+            <if test="difficult != null">
+                difficult = #{difficult},
+            </if>
+            <if test="correct != null">
+                correct = #{correct},
+            </if>
+            <if test="infoTextContentId != null">
+                info_text_content_id = #{infoTextContentId,jdbcType=INTEGER},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                deleted = #{deleted,jdbcType=BIT},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <update id="deleteById">
+        update t_question set deleted = 0 where id = #{id}
+    </update>
+    <select id="selectById" resultType="com.exam.onlineexamapi.domain.entity.Question">
+        select *
+        from t_question
+        where id = #{id}
+    </select>
+    <select id="findByPage" resultType="com.exam.onlineexamapi.domain.entity.Question">
+        select * from t_question where deleted = 1
+    </select>
+    <select id="findPageByType" resultType="com.exam.onlineexamapi.domain.entity.Question">
+        select * from t_question where deleted = 1 and question_type = #{questionType}
+    </select>
 </mapper>
