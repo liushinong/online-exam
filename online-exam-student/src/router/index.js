@@ -1,27 +1,61 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-
+import Login from '@/components/login/Login.vue'
 Vue.use(VueRouter)
+
+import Cookies from 'js-cookie'
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: '/login',
+    name: 'Login',
+    component: Login,
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/',
+    name: 'Home',
+    component: () => import("@/views/homepage/Homepage.vue"),
+    redirect: '/home',
+    children: [
+      {
+        path: '/home',
+        name: 'Home page',
+        component: () => import("@/views/homepage/Home.vue"),
+      },
+      {
+        path: '/paper',
+        name: 'Paper',
+        component: () => import("@/views/homepage/paper.vue"),
+      },
+      {
+        path: '/record',
+        name: 'Record',
+        component: () => import("@/views/homepage/record.vue"),
+      },
+      {
+        path: '/error',
+        name: 'Error',
+        component: () => import("@/views/homepage/error.vue"),
+      },
+    ]
   }
 ]
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.path === '/login' || to.path === '/register') {
+    next()
+  } else {
+    let token = Cookies.get('token')
+    if (token === null || token === "" || token === undefined) {
+      next('/login')
+    } else {
+      next()
+    }
+  }
 })
 
 export default router

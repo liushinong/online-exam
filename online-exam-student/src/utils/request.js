@@ -75,7 +75,10 @@ service.interceptors.response.use(response => {
     } else {
         // 超时处理
         if (JSON.stringify(error).includes('timeout')) {
-            ElMessage.error('服务器响应超时，请刷新当前页')
+            Message({
+                message: '服务器响应超时，请刷新当前页',
+                type: 'error'
+            })
         }
         error.message = '连接服务器失败'
     }

@@ -2,6 +2,7 @@ package com.exam.onlineexamapi.controller;
 
 import com.exam.onlineexamapi.domain.dto.LoginDTO;
 import com.exam.onlineexamapi.domain.entity.User;
+import com.exam.onlineexamapi.domain.vo.admin.LoginVO;
 import com.exam.onlineexamapi.mapper.UserMapper;
 import com.exam.onlineexamapi.result.RestResult;
 import com.exam.onlineexamapi.result.RestResultBuilder;
@@ -47,7 +48,12 @@ public class LoginController {
         }
         // 系统登录认证
         JwtAuthenticationToken token = SecurityUtils.login(request, username, password, authenticationManager);
-        return new RestResultBuilder<>().success(token);
+        LoginVO loginVO = LoginVO.builder()
+                .userId(user.getId())
+                .username(user.getUserName())
+                .token(token.getToken())
+                .build();
+        return new RestResultBuilder<>().success(loginVO);
     }
 
     @GetMapping("/user/info")
