@@ -10,4 +10,14 @@
     <select id="findByPage" resultType="com.exam.onlineexamapi.domain.entity.User">
         select * from t_user where role = 1
     </select>
+    <select id="findBySubject" resultType="com.exam.onlineexamapi.domain.entity.User">
+        select u.* from t_user_subject us, t_user u
+        <where>
+            us.user_id = u.id
+            <if test="subjectId != '0'">
+                and us.subject_id = #{subjectId}
+            </if>
+        </where>
+    </select>
+
 </mapper>

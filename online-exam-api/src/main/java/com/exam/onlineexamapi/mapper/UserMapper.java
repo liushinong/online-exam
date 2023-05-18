@@ -8,5 +8,8 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
     User findByName(String username);
+
     List<User> findByPage();
+
+    List<User> findBySubject(Integer subjectId);
 }

@@ -46,6 +46,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageResult findByPage(PageRequest pageRequest) {
-        return MybatisPageHelper.findByPage(pageRequest, userMapper);
+        PageResult pageResult = null;
+        Object subjectId = pageRequest.getParam("subjectId");
+
+        if(subjectId!=null){
+            pageResult = MybatisPageHelper.findByPage(pageRequest, userMapper, "findBySubject", subjectId);
+        }
+        else{
+            pageResult = MybatisPageHelper.findByPage(pageRequest, userMapper);
+        }
+        return pageResult;
     }
 }
