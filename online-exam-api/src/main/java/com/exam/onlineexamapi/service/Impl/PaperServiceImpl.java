@@ -37,9 +37,9 @@ public class PaperServiceImpl implements PaperService {
         return null;
     }
 
-    @Override
-    public RestResult paperSelect(Long subjectId) {
-        List<PaperSelectDO> list = PaperMapper.paperSelect(subjectId);
-        return new RestResultBuilder<>().success(list);
-    }
+//    @Override
+//    public RestResult paperSelect(Long subjectId) {
+//        List<PaperSelectDO> list = PaperMapper.paperSelect(subjectId);
+//        return new RestResultBuilder<>().success(list);
+//    }
 }

@@ -19,9 +19,9 @@ public class PaperController {
     @Resource
     PaperService paperService;
 
-    @PostMapping("/paperSelect")
-    public RestResult  paperSelect(@RequestBody PaperSelectDTO paperSelectDTO){
-     return paperService.paperSelect(PaperSelectDTO.getSubjectId());
-    }
+//    @PostMapping("/paperSelect")
+//    public RestResult  paperSelect(@RequestBody PaperSelectDTO paperSelectDTO){
+//     return paperService.paperSelect(PaperSelectDTO.getSubjectId());
+//    }
 
 }
