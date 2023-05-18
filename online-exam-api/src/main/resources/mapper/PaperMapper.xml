@@ -3,9 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.exam.onlineexamapi.mapper.PaperMapper">
-    <select id="paperSelect" resultType="com.exam.onlineexamapi.domain.DO.paper.PaperSelectDO">
-        select ep.`name`,question_count,score,suggest_time,limit_start_time,limit_end_time,t_subject.`name`
-        from t_exam_paper as ep,t_subject
-        where subject_id = #{subjectId} and ep.subject_id=t_subject.id
+    <select id="findPageBySubjectId" resultType="com.exam.onlineexamapi.domain.entity.Paper">
+        select * from t_exam_paper where subject_id = #{subjectId}
     </select>
 </mapper>
