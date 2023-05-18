@@ -42,8 +42,8 @@ export default {
     // margin: 0 auto;
     padding: 0 200px;
     background-color: #fff;
-    position: fixed;
-    z-index: 9999;
+    // position: fixed;
+    // z-index: 9999;
     .logo {
         width: 40px;
         padding: 10px;
@@ -55,7 +55,7 @@ export default {
 }
 
 .container-content {
-    margin: 60px 0;
+    // margin: 60px 0;
     padding: 0 200px;
     padding-top: 20px;
     // background-color: #f5f3f7;

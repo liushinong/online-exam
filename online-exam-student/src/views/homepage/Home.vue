@@ -33,6 +33,7 @@
                     <el-button
                         style="float: right"
                         icon="el-icon-circle-plus-outline"
+                        @click="dialogVisible = true"
                         >加入班级</el-button
                     >
                 </el-menu>
@@ -62,13 +63,26 @@
                             </div>
                         </div>
                     </div>
-                    <el-button round="true" size="medium">进入</el-button>
+                    <el-button round size="medium">进入</el-button>
                 </div>
             </el-main>
         </el-main>
+        <el-dialog :visible.sync="dialogVisible" title="加入班级" width="600px">
+            <span>课程码: </span>
+            <el-input
+                placeholder="请输入课程码"
+                v-model="subjectCode"
+                style="width: 260px; margin-left: 20px"
+            ></el-input>
+            <div slot="footer">
+                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="joinSubject">确定</el-button>
+            </div>
+        </el-dialog>
     </el-container>
 </template>
 <script>
+import { Message } from 'element-ui'
 export default {
     data() {
         return {
@@ -121,9 +135,19 @@ export default {
                     stuCount: 33,
                 },
             ],
+            dialogVisible: false,
+            subjectCode: '',
         }
     },
-    methods: {},
+    methods: {
+        joinSubject() {
+            this.dialogVisible = false
+            Message({
+                message: '加入班级成功',
+                type: 'success',
+            })
+        },
+    },
 }
 </script>
 <style scoped lang="scss">
