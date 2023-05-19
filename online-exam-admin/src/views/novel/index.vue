@@ -1,3 +1,4 @@
+
 <template>
   <el-card>
     <div slot="header">
@@ -6,73 +7,39 @@
         placeholder="搜索"
         style="width: 350px"
         @keyup.enter.native="init()"
-      ></el-input>
-      <el-button style="float: right" type="primary" @click="crawlNovel()"
-        >一键爬取</el-button
-      >
+      />
+      班级：
+      <el-select v-model="value" placeholder="请选择" @change="changesubject">
+        <el-option
+          v-for="item in options"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        >
+        </el-option>
+      </el-select>
     </div>
+
     <el-table
+      v-loading="loading"
       :data="tableData"
       border
       height="550"
       stripe
-      v-loading="loading"
       @filter-change="filterChange"
     >
-      <el-table-column
-        prop="id"
-        label="小说id"
-        width="80"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="name"
-        label="名称"
-        width="120"
-        align="center"
-      ></el-table-column>
-      <el-table-column prop="img" label="封面" width="100" align="center">
+      <el-table-column prop="id" label="学生id" align="center" />
+      <el-table-column prop="user_uuid" label="用户名" align="center" />
+      <el-table-column prop="real_name" label="真实姓名" align="center" />
+      <el-table-column prop="level" label="年级" align="center" />
+      <el-table-column prop="sex" label="性别" width="100" align="center" />
+      <el-table-column prop="phone" label="手机号" align="center" />
+      <el-table-column prop="age" label="年龄" align="center" />
+      <el-table-column prop="birth_day" label="生日" align="center" />
+
+      <el-table-column fixed="right" label="操作" width="150" align="center">
         <template slot-scope="scope">
-          <img :src="scope.row.img" alt="" width="80" height="100" />
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="type"
-        label="分类"
-        width="80"
-        align="center"
-        :filters="getFilterNameItem()"
-        column-key="filterTag"
-      ></el-table-column>
-      <el-table-column
-        prop="author"
-        label="作者"
-        width="100"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="lastChapter"
-        label="最新章节"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="lastPage"
-        label="最后页码"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="totalChapter"
-        label="总章节"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="lastChapterTitle"
-        label="最新章节标题"
-      ></el-table-column>
-      <el-table-column prop="updateAt" label="更新时间"></el-table-column>
-      <el-table-column fixed="right" label="操作" width="150">
-        <template slot-scope="scope">
-          <el-button @click="btnView(scope.row)" type="primary" size="small"
+          <el-button size="small" type="primary" @click="btnView(scope.row)"
             >查看</el-button
           >
           <el-button type="danger" size="small">编辑</el-button>
@@ -83,39 +50,42 @@
       background
       layout="prev, pager, next, sizes"
       :total="total"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
       :current-page="currentPage"
-      :page-sizes="[5, 10, 15]"
+      @size-change="handleSizeChange"
       :page-size="pageSize"
+      :page-sizes="[5, 10, 15]"
+      @current-change="handleCurrentChange"
     >
     </el-pagination>
   </el-card>
 </template>
 
 <script>
-import { getNovelList, crawlNovel } from "@/api/novel";
-import { getTypeList } from "@/api/type";
-import { checkSearch } from "@/utils/util";
+import { findStudent } from "@/api/student";
+import { findSubjectBT } from "@/api/student";
+
 export default {
   data() {
     return {
+      list: [],
       searchParams: {},
       loading: true,
       tableData: [],
+
       currentPage: 1,
       pageSize: 10,
       total: 50,
       searchText: "",
-      typeList: [],
-      filterList: [],
+      l: "",
+      options: [],
+      value: "",
     };
   },
   methods: {
     // 初始化数据
     init() {
       this.loading = false;
-      if (this.searchText != "") {
+      if (this.searchText != " ") {
         this.currentPage = 1;
       }
       this.searchParams = {
@@ -124,23 +94,42 @@ export default {
         length: this.pageSize,
         typeIdList: this.filterList,
       };
-      // getNovelList(this.searchParams).then((res) => {
-      //   this.tableData = res.data.list;
-      //   this.total = res.data.total;
-      //   // this.currentPage = 1;
-      //   // if (this.searchText != "") {
-      //   //   this.currentPage = 1;
-      //   // }
-      //   this.loading = false;
-      // });
-      // getTypeList().then((res) => {
-      //   let list = res.data;
-      //   this.typeList = [];
-      //   for (let item of list) {
-      //     this.typeList.push({ text: item.type, value: item.id });
-      //   }
-      // });
     },
+    changesubject(val) {
+      console.log(val);
+
+      var data = {
+        pageNum: 1,
+        pageSize: 10,
+        params: {
+          subjectId: val,
+        },
+      };
+      findStudent(data).then((res) => {
+        this.list = res.data.content;
+        this.tableData2 = new Array();
+        for (let i = 0; i < res.data.content.length; i++) {
+          if ((this.list[i].sex = 1)) {
+            this.list[i].sex = "男";
+          } else {
+            this.list[i].sex = "女";
+          }
+
+          this.tableData2[i] = {
+            id: this.list[i].id,
+            user_uuid: this.list[i].userName,
+            real_name: this.list[i].realName,
+            level: this.list[i].userLevel,
+            sex: this.list[i].sex,
+            phone: this.list[i].phone,
+            age: this.list[i].age,
+            birth_day: this.list[i].birthDay,
+          };
+        }
+        this.tableData = this.tableData2;
+      });
+    },
+
     // 每页显示数量
     handleSizeChange(size) {
       this.pageSize = size;
@@ -183,6 +172,17 @@ export default {
   },
   created() {
     this.init();
+    var data = {
+      pageNum: 1,
+      pageSize: 10,
+      params: {
+        teacherId: 2,
+        name: "",
+      },
+    };
+    findSubjectBT(data).then((res) => {
+      this.options = res.data.content;
+    });
   },
 };
 </script>
