@@ -108,6 +108,95 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/subject',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/subject/index'),
+        name: 'Subject',
+        meta: {
+          title: '学科管理', icon: 'el-icon-s-order', noCache: true
+        }
+      }
+    ]
+  },
+  {
+    path: '/question',
+    component: Layout,
+    name: 'Question',
+    meta: {
+      title: '题库管理',
+      icon: 'el-icon-s-order'
+    },
+    children: [
+      {
+        path: '/list',
+        component: () => import('@/views/question/list'),
+        name: 'QuestionList',
+        meta: {
+          title: '题目列表',
+          noCache: true
+        }
+      },
+      {
+        path: '/edit/singleChoice',
+        component: () => import('@/views/question/edit/single-choice'),
+        name: 'SingleChoicePage',
+        meta: {
+          title: '单选题编辑',
+          noCache: true,
+          activeMenu: '/question/list',
+          hidden: true
+        }
+      },
+      {
+        path: '/edit/multipleChoice',
+        component: () => import('@/views/question/edit/multiple-choice'),
+        name: 'MultipleChoicePage',
+        meta: {
+          title: '多选题编辑',
+          noCache: true,
+          activeMenu: '/question/list',
+          hidden: true
+        }
+      },
+      {
+        path: '/edit/trueFalse',
+        component: () => import('@/views/question/edit/true-false'),
+        name: 'TrueFalse',
+        meta: {
+          title: '判断题编辑',
+          noCache: true,
+          activeMenu: '/question/list',
+          hidden: true
+        }
+      },
+      {
+        path: '/edit/gapFilling',
+        component: () => import('@/views/question/edit/gap-filling'),
+        name: 'GapFilling',
+        meta: {
+          title: '填空题编辑',
+          noCache: true,
+          activeMenu: '/question/list',
+          hidden: true
+        }
+      },
+      {
+        path: '/edit/short-answer',
+        component: () => import('@/views/question/edit/short-answer'),
+        name: 'ShortAnswer',
+        meta: {
+          title: '简答题编辑',
+          noCache: true,
+          activeMenu: '/question/list',
+          hidden: true
+        }
+      },
+    ]
+  },
+  {
     path: '/error',
     component: Layout,
     redirect: 'noRedirect',
