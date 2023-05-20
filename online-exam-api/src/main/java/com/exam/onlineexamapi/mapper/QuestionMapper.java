@@ -14,9 +14,13 @@ public interface QuestionMapper {
 
     Integer updateById(Question question);
 
-    Integer deleteById(Long id);
+    Integer deleteById(Integer id);
 
-    List<Question> findByPage();
+    List<Question> findPageByTeacher(Integer teacherId);
 
-    List<Question> findPageByType(Integer questionType);
+    List<Question> findPageByTypeAndSubject(Integer questionType, Integer subjectId, Integer teacherId);
+
+    List<Question> findPageByType(Integer questionType, Integer teacherId);
+
+    List<Question> findPageBySubject(Integer subjectId, Integer teacherId);
 }
