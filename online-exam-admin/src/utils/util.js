@@ -45,3 +45,12 @@ export const checkSearch = (var1, var2, excludeKeys = ['pageSize', 'page']) => {
 
     return equals(arg1, arg2)
 }
+
+/**
+ * 时间格式化
+ * @param {} time 
+ * @returns 
+ */
+export function timeFormat (time) {
+    return time.split("T")[0] + ' ' + time.split("T")[1].split('.')[0]
+}

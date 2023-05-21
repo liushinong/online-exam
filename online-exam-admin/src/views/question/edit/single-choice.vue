@@ -80,15 +80,57 @@
         <el-button type="success" @click="showQuestion">预览</el-button>
       </el-form-item>
     </el-form>
+    <el-dialog :visible.sync="richEditor.dialogVisible">
+      <Ueditor @ready="editorReady"></Ueditor>
+      <span slot="footer">
+        <el-button type="primary" @click="editorConfirm">确定</el-button>
+        <el-button @click="richEditor.dialogVisible = false">取消</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      :visible.sync="questionShow.dialog"
+      style="width: 100%; height: 100%"
+    >
+      <QuestionShow
+        :qType="questionShow.qType"
+        :question="questionShow.question"
+        :qLoading="questionShow.loading"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import Ueditor from "@/components/Ueditor";
+import QuestionShow from "../components/Show";
+import { selectById, edit } from "@/api/question";
+import { mapActions, mapState } from "vuex";
 export default {
   name: "single-choice",
+  components: {
+    Ueditor,
+    QuestionShow,
+  },
+  created() {
+    let that = this;
+    this.initSubject();
+    let id = this.$route.query.id;
+    if (id && parseInt(id) !== 0) {
+      that.formLoading = true;
+      selectById(id).then((res) => {
+        that.form = res.data;
+        that.form.userId = 2;
+        that.formLoading = false;
+      });
+    }
+  },
+  computed: {
+    ...mapState("exam", { subjectFilter: (state) => state.subjects }),
+  },
   data() {
     return {
       form: {
+        userId: 2,
         id: null,
         questionType: 1,
         subjectId: null,
@@ -105,16 +147,6 @@ export default {
         difficult: 0,
       },
       formLoading: false,
-      subjectFilter: [
-        {
-          id: 1,
-          name: "语文",
-        },
-        {
-          id: 2,
-          name: "数学",
-        },
-      ],
       rules: {
         subjectId: [
           { required: true, message: "请选择学科", trigger: "change" },
@@ -126,13 +158,57 @@ export default {
           { required: true, message: "请选择正确答案", trigger: "change" },
         ],
       },
+      richEditor: {
+        dialogVisible: false,
+        object: null,
+        parameterName: "",
+        instance: null,
+      },
+      questionShow: {
+        qType: 0,
+        dialog: false,
+        question: null,
+        loading: false,
+      },
     };
   },
   methods: {
-    inputClick(object, parameterName) {
-
+    editorReady(instance) {
+      this.richEditor.instance = instance;
+      let currentContent =
+        this.richEditor.object[this.richEditor.parameterName];
+      this.richEditor.instance.setContent(currentContent);
+      // 光标定位到Ueditor
+      this.richEditor.instance.focus(true);
     },
-    submitForm() {},
+    inputClick(object, parameterName) {
+      this.richEditor.object = object;
+      this.richEditor.parameterName = parameterName;
+      this.richEditor.dialogVisible = true;
+    },
+    submitForm() {
+      let that = this;
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          this.formLoading = true;
+          edit(this.form)
+            .then((res) => {
+              if (res.code == 0) {
+                that.$message.success("操作成功");
+                that.delCurrentView(that).then(() => {
+                  that.$router.push("/list");
+                });
+              } else {
+                that.$message.error("操作失败");
+                this.formLoading = false;
+              }
+            })
+            .catch((e) => {
+              this.formLoading = false;
+            });
+        }
+      });
+    },
     resetForm() {
       this.form = {
         id: null,
@@ -165,7 +241,19 @@ export default {
     questionItemRemove(index) {
       this.form.items.splice(index, 1);
     },
-    showQuestion() {},
+    showQuestion() {
+      this.questionShow.dialog = true;
+      this.questionShow.qType = this.form.questionType;
+      this.questionShow.question = this.form;
+    },
+    editorConfirm() {
+      let content = this.richEditor.instance.getContent();
+      this.richEditor.object[this.richEditor.parameterName] = content;
+      this.richEditor.dialogVisible = false;
+      this.richEditor.instance.setContent("");
+    },
+    ...mapActions("exam", { initSubject: "initSubject" }),
+    ...mapActions("tagsView", { delCurrentView: "delCurrentView" }),
   },
 };
 </script>

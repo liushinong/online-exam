@@ -2,9 +2,11 @@ package com.exam.onlineexamapi.service.Impl;
 
 import com.exam.onlineexamapi.domain.DO.question.QuestionItemObject;
 import com.exam.onlineexamapi.domain.DO.question.QuestionObject;
+import com.exam.onlineexamapi.domain.dto.admin.question.QuestionEditItemRequestDTO;
 import com.exam.onlineexamapi.domain.dto.admin.question.QuestionEditRequestDTO;
 import com.exam.onlineexamapi.domain.entity.Question;
 import com.exam.onlineexamapi.domain.entity.TextContent;
+import com.exam.onlineexamapi.domain.enums.QuestionTypeEnum;
 import com.exam.onlineexamapi.domain.vo.admin.QuestionVO;
 import com.exam.onlineexamapi.mapper.QuestionMapper;
 import com.exam.onlineexamapi.page.MybatisPageHelper;
@@ -12,7 +14,10 @@ import com.exam.onlineexamapi.page.PageRequest;
 import com.exam.onlineexamapi.page.PageResult;
 import com.exam.onlineexamapi.service.QuestionService;
 import com.exam.onlineexamapi.service.TextContentService;
+import com.exam.onlineexamapi.utils.ExamUtil;
 import com.exam.onlineexamapi.utils.JsonUtil;
+import com.exam.onlineexamapi.utils.ModelMapperSingle;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +30,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
+
+    protected final static ModelMapper modelMapper = ModelMapperSingle.Instance();
 
     @Resource
     QuestionMapper questionMapper;
@@ -75,6 +82,60 @@ public class QuestionServiceImpl implements QuestionService {
         return textContentService.updateById(textContent);
     }
 
+    @Override
+    public QuestionEditRequestDTO getQuestionEditRequestVM(Integer id) {
+        Question question = questionMapper.selectById(id);
+        return getQuestionEditRequestVM(question);
+    }
+
+    @Override
+    public QuestionEditRequestDTO getQuestionEditRequestVM(Question question) {
+        // 题目映射
+        TextContent questionInfoTextContent = textContentService.findById(question.getInfoTextContentId());
+        QuestionObject questionObject = JsonUtil.toJsonObject(questionInfoTextContent.getContent(), QuestionObject.class);
+        QuestionEditRequestDTO questionEditRequestDTO = modelMapper.map(question, QuestionEditRequestDTO.class);
+        questionEditRequestDTO.setTitle(questionObject.getTitleContent());
+
+        // 答案
+        QuestionTypeEnum questionTypeEnum = QuestionTypeEnum.fromCode(question.getQuestionType());
+        switch (questionTypeEnum) {
+            case SingleChoice:
+            case TrueFalse:
+                questionEditRequestDTO.setCorrect(question.getCorrect());
+                break;
+            case MultipleChoice:
+                questionEditRequestDTO.setCorrectArray(ExamUtil.contentToArray(question.getCorrect()));
+                break;
+            case GapFilling:
+                List<String> correctContent = questionObject.getQuestionItemObjectList().stream().map(d -> d.getContent()).collect(Collectors.toList());
+                questionEditRequestDTO.setCorrectArray(correctContent);
+                break;
+            case ShortAnswer:
+                questionEditRequestDTO.setCorrect(question.getCorrect());
+                break;
+            default:
+                break;
+        }
+        questionEditRequestDTO.setScore(String.valueOf(question.getScore()));
+        questionEditRequestDTO.setAnalyze(questionObject.getAnalyze());
+
+        // 题目项映射
+        List<QuestionEditItemRequestDTO> editItems = questionObject.getQuestionItemObjectList().stream().map(o -> {
+            QuestionEditItemRequestDTO questionItemObject = modelMapper.map(o, QuestionEditItemRequestDTO.class);
+            if (o.getScore() != null) {
+                questionItemObject.setScore(String.valueOf(o.getScore()));
+            }
+            return questionItemObject;
+        }).collect(Collectors.toList());
+        questionEditRequestDTO.setItems(editItems);
+        return questionEditRequestDTO;
+    }
+
+    @Override
+    public Integer delQuestion(Integer id) {
+        return questionMapper.deleteById(id);
+    }
+
     /**
      * 题干，解析等info插入到content表
      *
@@ -112,7 +173,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public int delete(Question record) {
-        return questionMapper.deleteById(record.getId());
+        return 1;
     }
 
     @Override
@@ -129,10 +190,17 @@ public class QuestionServiceImpl implements QuestionService {
     public PageResult findByPage(PageRequest pageRequest) {
         PageResult pageResult = null;
         Object questionType = pageRequest.getParam("questionType");
-        if (questionType != null) {
-            pageResult = MybatisPageHelper.findByPage(pageRequest, questionMapper, "findPageByType", questionType);
-        } else {
-            pageResult = MybatisPageHelper.findByPage(pageRequest, questionMapper);
+        Object subjectId = pageRequest.getParam("subjectId");
+        Object teacherId = pageRequest.getParam("teacherId");
+        if (questionType != null && subjectId != null) {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, questionMapper, "findPageByTypeAndSubject", questionType, subjectId, teacherId);
+        } else if (questionType != null) {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, questionMapper, "findPageByType", questionType, teacherId);
+        } else if (subjectId != null) {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, questionMapper, "findPageBySubject", subjectId, teacherId);
+        }
+        else {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, questionMapper, "findPageByTeacher", teacherId);
         }
         List<Question> list = (List<Question>) pageResult.getContent();
         List<QuestionVO> listVO = new ArrayList<>();
@@ -158,4 +226,6 @@ public class QuestionServiceImpl implements QuestionService {
         pageResult.setContent(listVO);
         return pageResult;
     }
+
+
 }

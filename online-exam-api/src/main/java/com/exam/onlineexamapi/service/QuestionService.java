@@ -8,4 +8,10 @@ public interface QuestionService extends CurdService<Question>{
     Integer insertQuestion(QuestionEditRequestDTO model);
 
     Integer updateQuestion(QuestionEditRequestDTO model);
+
+    QuestionEditRequestDTO getQuestionEditRequestVM(Integer id);
+
+    QuestionEditRequestDTO getQuestionEditRequestVM(Question question);
+
+    Integer delQuestion(Integer id);
 }

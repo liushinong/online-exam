@@ -184,7 +184,7 @@ export const constantRoutes = [
         }
       },
       {
-        path: '/edit/short-answer',
+        path: '/edit/shortAnswer',
         component: () => import('@/views/question/edit/short-answer'),
         name: 'ShortAnswer',
         meta: {

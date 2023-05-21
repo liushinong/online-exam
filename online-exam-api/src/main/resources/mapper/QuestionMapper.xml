@@ -46,17 +46,53 @@
         where id = #{id}
     </update>
     <update id="deleteById">
-        update t_question set deleted = 0 where id = #{id}
+        update t_question
+        set deleted = 0
+        where id = #{id}
     </update>
     <select id="selectById" resultType="com.exam.onlineexamapi.domain.entity.Question">
         select *
         from t_question
         where id = #{id}
     </select>
-    <select id="findByPage" resultType="com.exam.onlineexamapi.domain.entity.Question">
-        select * from t_question where deleted = 1
+    <select id="findPageByTeacher" resultType="com.exam.onlineexamapi.domain.entity.Question">
+        select q.*
+        from t_question as q,
+             t_subject as s
+        where q.deleted = 1
+          and q.subject_id = s.id
+          and s.teacher_id = #{teacherId}
+          and s.deleted = 1
+    </select>
+    <select id="findPageByTypeAndSubject" resultType="com.exam.onlineexamapi.domain.entity.Question">
+        select q.*
+        from t_question as q,
+             t_subject as s
+        where q.deleted = 1
+          and q.question_type = #{questionType}
+          and q.subject_id = #{subjectId}
+          and q.subject_id = s.id
+          and s.teacher_id = #{teacherId}
+          and s.deleted = 1
     </select>
     <select id="findPageByType" resultType="com.exam.onlineexamapi.domain.entity.Question">
-        select * from t_question where deleted = 1 and question_type = #{questionType}
+        select q.*
+        from t_question as q,
+             t_subject as s
+        where q.deleted = 1
+          and question_type = #{questionType}
+          and q.subject_id = s.id
+          and s.teacher_id = #{teacherId}
+          and s.deleted = 1
+    </select>
+    <select id="findPageBySubject" resultType="com.exam.onlineexamapi.domain.entity.Question">
+        select q.*
+        from t_question as q,
+             t_subject as s
+        where q.deleted = 1
+          and subject_id = #{subjectId}
+          and q.subject_id = s.id
+          and s.teacher_id = #{teacherId}
+          and s.deleted = 1
     </select>
 </mapper>
