@@ -36,8 +36,7 @@
             </if>
             <if test="status != null">
                 status = #{status,jdbcType=INTEGER},
-            </if>
-            <if test="createTime != null">
+            </if>            <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="deleted != null">
