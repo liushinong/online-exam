@@ -197,7 +197,7 @@ export default {
               if (res.code == 0) {
                 that.$message.success("操作成功");
                 that.delCurrentView(that).then(() => {
-                  that.$router.push("/list");
+                  that.$router.push("/question/list");
                 });
               } else {
                 that.$message.error("操作失败");

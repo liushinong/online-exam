@@ -2,10 +2,12 @@ package com.exam.onlineexamapi.utils;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Json转换工具类
@@ -42,6 +44,17 @@ public class JsonUtil {
             e.printStackTrace();
         } catch (JsonParseException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static <T> List<T> toJsonListObject(String json, Class<T> valueType) {
+        try {
+            JavaType getCollectionType = MAPPER.getTypeFactory().constructParametricType(List.class, valueType);
+            List<T> list = MAPPER.readValue(json, getCollectionType);
+            return list;
         } catch (IOException e) {
             e.printStackTrace();
         }

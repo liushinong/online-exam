@@ -72,6 +72,13 @@
         </template>
       </el-table-column>
     </el-table>
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="queryParam.pageNum"
+      :limit.sync="queryParam.pageSize"
+      @pagination="search"
+    />
     <el-dialog
       :visible.sync="questionShow.dialog"
       style="width: 100%; height: 100%"
@@ -90,10 +97,12 @@ import { mapActions, mapState, mapGetters } from "vuex";
 import { pageList, selectById, del } from "@/api/question";
 import { timeFormat } from "@/utils/util";
 import QuestionShow from "./components/Show";
+import Pagination from "@/components/Pagination";
 export default {
   name: "list",
   components: {
     QuestionShow,
+    Pagination,
   },
   data() {
     return {
@@ -112,6 +121,7 @@ export default {
         question: null,
         loading: false,
       },
+      total: 0,
     };
   },
   created() {
@@ -120,6 +130,7 @@ export default {
   },
   methods: {
     search() {
+      let that = this;
       this.listLoading = true;
       if (this.queryParam.params.questionType == "") {
         this.queryParam.params.questionType = null;
@@ -128,8 +139,10 @@ export default {
         this.queryParam.params.subjectId = null;
       }
       pageList(this.queryParam).then((res) => {
-        this.tableData = res.data.content;
-        this.listLoading = false;
+        that.tableData = res.data.content;
+        that.listLoading = false;
+        that.total = res.data.totalSize;
+        that.queryParam.pageNum = res.data.pageNum;
       });
     },
     submitForm() {
