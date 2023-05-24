@@ -1,28 +1,23 @@
-import Cookies from 'js-cookie'
-import Vuex from 'vuex'
 import Vue from 'vue'
+import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-const actions = {}
+// https://webpack.js.org/guides/dependency-management/#requirecontext
+const modulesFiles = require.context('./modules', true, /\.js$/)
 
-
-const mutations = {
-  changeLogin (state, user) {
-    state.token = user.token
-    Cookies.set('token', user.token)
-  }
-}
-
-const state = {
-  token: Cookies.get('token') ? Cookies.get('token') : ''
-}
+// you do not need `import app from './modules/app'`
+// it will auto require all vuex module from modules file
+const modules = modulesFiles.keys().reduce((modules, modulePath) => {
+    // set './app.js' => 'app'
+    const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1')
+    const value = modulesFiles(modulePath)
+    modules[moduleName] = value.default
+    return modules
+}, {})
 
 const store = new Vuex.Store({
-  actions,
-  mutations,
-  state
+    modules
 })
-
 
 export default store

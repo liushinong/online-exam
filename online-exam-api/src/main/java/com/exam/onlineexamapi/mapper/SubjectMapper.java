@@ -2,6 +2,7 @@ package com.exam.onlineexamapi.mapper;
 
 import com.exam.onlineexamapi.domain.dto.admin.question.SubjectEditDTO;
 import com.exam.onlineexamapi.domain.entity.Subject;
+import com.exam.onlineexamapi.domain.vo.student.SubjectVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public interface SubjectMapper {
     Integer update(SubjectEditDTO subjectEditDTO);
     Subject findById(Long id);
     Integer delete(Long id);
+    List<SubjectVO> getSubjectByStuId(Integer id);
 }

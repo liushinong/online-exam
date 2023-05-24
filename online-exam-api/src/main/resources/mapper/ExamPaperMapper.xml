@@ -148,6 +148,10 @@
         set deleted = 0
         where id = #{id};
     </update>
+    <select id="studentPageByType" resultType="com.exam.onlineexamapi.domain.entity.ExamPaper">
+        select ep.* from t_exam_paper as ep, t_user_subject as us
+        where ep.subject_id = us.subject_id and us.user_id = #{userId} and ep.paper_type = #{paperType} and ep.deleted = 1
+    </select>
     <select id="selectByPrimaryKey" resultType="com.exam.onlineexamapi.domain.entity.ExamPaper">
         select *
         from t_exam_paper
@@ -159,5 +163,10 @@
     <select id="findPageByTeacher" resultType="com.exam.onlineexamapi.domain.entity.ExamPaper">
         select *
         from t_exam_paper where create_user = #{teacherId} and deleted = 1
+    </select>
+    <select id="studentPageBySubjectAndType" resultType="com.exam.onlineexamapi.domain.entity.ExamPaper">
+        select ep.* from t_exam_paper as ep, t_user_subject as us
+        where ep.subject_id = us.subject_id and us.user_id = #{userId} and ep.paper_type = #{paperType} and ep.subject_id = #{subjectId}
+and ep.deleted = 1
     </select>
 </mapper>

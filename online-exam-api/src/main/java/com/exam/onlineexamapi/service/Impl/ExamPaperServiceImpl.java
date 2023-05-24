@@ -125,6 +125,20 @@ public class ExamPaperServiceImpl implements ExamPaperService {
         return vm;
     }
 
+    @Override
+    public PageResult studentPage(PageRequest pageRequest) {
+        PageResult pageResult = null;
+        Object userId = pageRequest.getParam("userId");
+        Object subjectId = pageRequest.getParam("subjectId");
+        Object paperType = pageRequest.getParam("paperType");
+        if (subjectId != null && paperType != null) {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, examPaperMapper, "studentPageBySubjectAndType", subjectId, paperType, userId);
+        } else {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, examPaperMapper, "studentPageByType", paperType, userId);
+        }
+        return pageResult;
+    }
+
     private void examPaperFromVM(ExamPaperEditRequestDTO examPaperEditRequestDTO, ExamPaper examPaper, List<ExamPaperTitleItemDTO> titleItems) {
         Integer questionCount = titleItems.stream().mapToInt(t -> t.getQuestionItems().size()).sum();
         Integer score = titleItems.stream().flatMapToInt(t -> t.getQuestionItems().stream().mapToInt(q -> ExamUtil.scoreFromVM(q.getScore()))).sum();
