@@ -1,6 +1,9 @@
 package com.exam.onlineexamapi.service.Impl;
 
 import com.exam.onlineexamapi.domain.entity.User;
+import com.exam.onlineexamapi.domain.vo.admin.DetailVo;
+import com.exam.onlineexamapi.domain.vo.student.InformationVo;
+import com.exam.onlineexamapi.domain.vo.student.SubjectVO;
 import com.exam.onlineexamapi.mapper.UserMapper;
 import com.exam.onlineexamapi.page.MybatisPageHelper;
 import com.exam.onlineexamapi.page.PageRequest;
@@ -30,6 +33,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public RestResult selectAll(Integer teacherId) {
+        DetailVo detailVo =  DetailVo.builder().questionNum(userMapper.selectQuestionNum(teacherId)).
+                subjectNum(userMapper.selectSubjectNum(teacherId)).
+                studentNum(userMapper.selectStudentNum(teacherId)).
+                paperNum(userMapper.selectPaperNum(teacherId)).build();
+        return new RestResultBuilder<>().success(detailVo);
+    }
+
+    @Override
+    public RestResult selectInformation(Integer studentId) {
+       InformationVo informationVo =InformationVo.builder().subjectNum(userMapper.subjectNum2(studentId)).
+               paperNum(userMapper.paperNum2(studentId)).
+               finishPaperNum(userMapper.finishPaperNum(studentId)).
+               wrongQuestionNum(userMapper.wrongQuestionNum(studentId)).build();
+        return new RestResultBuilder<>().success(informationVo );
+    }
+
+    @Override
     public int save(User record) {
         return 0;
     }
@@ -45,8 +66,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(Long id) {
-        return null;
+    public User findById(Integer id) {
+        return userMapper.findById(id);
     }
 
     @Override

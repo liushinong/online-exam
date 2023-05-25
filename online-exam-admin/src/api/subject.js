@@ -9,27 +9,35 @@
 import request from '@/utils/request'
 
 export function list(data) {
-  return request({
-    url: '/admin/subject/page',
-    method: 'post',
-    data
-  })
+    return request({
+        url: '/admin/subject/page',
+        method: 'post',
+        data
+    })
 }
 
 export function deleteSubject(id) {
-  return request({
-    url: '/admin/subject/delete',
-    method: 'post',
-    params: {
-      id: id
-    }
-  })
+    return request({
+        url: '/admin/subject/delete',
+        method: 'post',
+        params: {
+            id: id
+        }
+    })
 }
 
 export function addSubject(data) {
-  return request({
-    url: '/admin/subject/edit',
-    method: 'post',
-    data
-  })
+    return request({
+        url: '/admin/subject/edit',
+        method: 'post',
+        data
+    })
+}
+
+export function deleteSubjectUser(data) {
+    return request({
+        url: '/admin/subject/deleteSubjectUser',
+        method: 'post',
+        data
+    })
 }

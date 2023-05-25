@@ -11,41 +11,41 @@ import lombok.NoArgsConstructor;
 @Builder
 public class User {
 
-  private long id;
-  private long userUuid;
+  private Integer id;
+  private Integer userUuid;
   private String userName;
   private String realName;
   private String password;
   private String salt;
   private String birthDay;
-  private long userLevel;
-  private long age;
-  private long sex;
+  private Integer userLevel;
+  private Integer age;
+  private Integer sex;
   private String phone;
-  private long role;
-  private long status;
+  private Integer role;
+  private Integer status;
   private String imagePath;
   private java.sql.Timestamp createTime;
   private java.sql.Timestamp modifyTime;
   private java.sql.Timestamp lastActiveTime;
-  private long deleted;
+  private Integer deleted;
   private String wxOpenId;
 
 
-  public long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
 
-  public long getUserUuid() {
+  public Integer getUserUuid() {
     return userUuid;
   }
 
-  public void setUserUuid(long userUuid) {
+  public void setUserUuid(Integer userUuid) {
     this.userUuid = userUuid;
   }
 
@@ -86,29 +86,29 @@ public class User {
   }
 
 
-  public long getUserLevel() {
+  public Integer getUserLevel() {
     return userLevel;
   }
 
-  public void setUserLevel(long userLevel) {
+  public void setUserLevel(Integer userLevel) {
     this.userLevel = userLevel;
   }
 
 
-  public long getAge() {
+  public Integer getAge() {
     return age;
   }
 
-  public void setAge(long age) {
+  public void setAge(Integer age) {
     this.age = age;
   }
 
 
-  public long getSex() {
+  public Integer getSex() {
     return sex;
   }
 
-  public void setSex(long sex) {
+  public void setSex(Integer sex) {
     this.sex = sex;
   }
 
@@ -122,20 +122,20 @@ public class User {
   }
 
 
-  public long getRole() {
+  public Integer getRole() {
     return role;
   }
 
-  public void setRole(long role) {
+  public void setRole(Integer role) {
     this.role = role;
   }
 
 
-  public long getStatus() {
+  public Integer getStatus() {
     return status;
   }
 
-  public void setStatus(long status) {
+  public void setStatus(Integer status) {
     this.status = status;
   }
 
@@ -176,11 +176,11 @@ public class User {
   }
 
 
-  public long getDeleted() {
+  public Integer getDeleted() {
     return deleted;
   }
 
-  public void setDeleted(long deleted) {
+  public void setDeleted(Integer deleted) {
     this.deleted = deleted;
   }
 

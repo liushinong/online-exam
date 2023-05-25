@@ -5,15 +5,15 @@ import java.sql.Timestamp;
 
 public class Subject {
 
-  private long id;
+  private Integer id;
   private String name;
   private String subjectCode;
-  private long level;
+  private Integer level;
   private String levelName;
-  private long itemOrder;
-  private long deleted;
+  private Integer itemOrder;
+  private Integer deleted;
   private String image;
-  private long teacherId;
+  private Integer teacherId;
 
   public Timestamp getCreateTime() {
     return createTime;
@@ -26,11 +26,11 @@ public class Subject {
   private Timestamp createTime;
 
 
-  public long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -53,11 +53,11 @@ public class Subject {
   }
 
 
-  public long getLevel() {
+  public Integer getLevel() {
     return level;
   }
 
-  public void setLevel(long level) {
+  public void setLevel(Integer level) {
     this.level = level;
   }
 
@@ -71,20 +71,20 @@ public class Subject {
   }
 
 
-  public long getItemOrder() {
+  public Integer getItemOrder() {
     return itemOrder;
   }
 
-  public void setItemOrder(long itemOrder) {
+  public void setItemOrder(Integer itemOrder) {
     this.itemOrder = itemOrder;
   }
 
 
-  public long getDeleted() {
+  public Integer getDeleted() {
     return deleted;
   }
 
-  public void setDeleted(long deleted) {
+  public void setDeleted(Integer deleted) {
     this.deleted = deleted;
   }
 
@@ -98,11 +98,11 @@ public class Subject {
   }
 
 
-  public long getTeacherId() {
+  public Integer getTeacherId() {
     return teacherId;
   }
 
-  public void setTeacherId(long teacherId) {
+  public void setTeacherId(Integer teacherId) {
     this.teacherId = teacherId;
   }
 

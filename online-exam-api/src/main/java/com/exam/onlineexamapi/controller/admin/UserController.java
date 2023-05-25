@@ -24,4 +24,8 @@ public class UserController {
     public RestResult findByDate(@RequestParam Integer createId ){
         return new RestResultBuilder<>().success(userService.findByDate(createId));
     }
+    @PostMapping("/selectAll")
+    public RestResult selectAll(@RequestParam Integer teacherId){
+        return new RestResultBuilder<>().success(userService.selectAll(teacherId));
+    }
 }

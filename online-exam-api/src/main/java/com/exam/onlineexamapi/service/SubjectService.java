@@ -1,7 +1,9 @@
 package com.exam.onlineexamapi.service;
 
 import com.exam.onlineexamapi.domain.dto.admin.question.SubjectEditDTO;
+import com.exam.onlineexamapi.domain.dto.admin.subject.SubjectUserDTO;
 import com.exam.onlineexamapi.domain.entity.Subject;
+import com.exam.onlineexamapi.domain.vo.student.SubjectVO;
 import com.exam.onlineexamapi.page.PageRequest;
 import com.exam.onlineexamapi.page.PageResult;
 
@@ -13,4 +15,8 @@ public interface SubjectService extends CurdService<Subject>{
     Integer insertSubject(SubjectEditDTO subjectEditDTO);
 
     Integer updateSubject(SubjectEditDTO subjectEditDTO);
+
+    List<SubjectVO> getSubjectByStuId(Integer id);
+
+    Integer deleteSubjectUser(SubjectUserDTO subjectUserDTO);
 }

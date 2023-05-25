@@ -182,7 +182,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question findById(Long id) {
+    public Question findById(Integer id) {
         return null;
     }
 

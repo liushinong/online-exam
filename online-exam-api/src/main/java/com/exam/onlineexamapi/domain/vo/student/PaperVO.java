@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PaperVO {
-    private Long id;
+    private Integer id;
     private String name;
     private java.sql.Timestamp suggestTime;
     private java.sql.Timestamp limitStartTime;
     private java.sql.Timestamp limitEndTime;
-    private Long score;
-    private Long questionCount;
-    private Long subjectName;
+    private Integer score;
+    private Integer questionCount;
+    private Integer subjectName;
 }

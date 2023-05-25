@@ -37,7 +37,7 @@ public class QuestionController {
     }
 
     @PostMapping("/delete")
-    public RestResult delete(@RequestParam Integer id) {
+    public RestResult del(@RequestParam Integer id) {
 //        Question question = questionService.findById(id);
         return new RestResultBuilder<>().success(questionService.delQuestion(id));
     }

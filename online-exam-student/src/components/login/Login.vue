@@ -41,13 +41,13 @@ export default {
     data() {
         return {
             loginForm: {
-                username: 'admin',
-                password: 'admin',
+                username: 'xkk',
+                password: 'xkk',
             },
         }
     },
     methods: {
-        ...mapMutations(['changeLogin']),
+        ...mapMutations(['user/changeLogin']),
         submitForm() {
             let that = this
             if (
@@ -63,8 +63,8 @@ export default {
                     let data = res.data
                     if (data.code === 0) {
                         console.log(data)
-                        that.changeLogin({ token: data.data.token })
-                        localStorage.setItem('userId', data.data.usedId)
+                        that['user/changeLogin']({ token: data.data.token })
+                        localStorage.setItem('userId', data.data.userId)
                         localStorage.setItem('username', data.data.username)
                         Message({
                             message: '登录成功',

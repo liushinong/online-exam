@@ -1,7 +1,9 @@
 package com.exam.onlineexamapi.service.Impl;
 
 import com.exam.onlineexamapi.domain.dto.admin.question.SubjectEditDTO;
+import com.exam.onlineexamapi.domain.dto.admin.subject.SubjectUserDTO;
 import com.exam.onlineexamapi.domain.entity.Subject;
+import com.exam.onlineexamapi.domain.vo.student.SubjectVO;
 import com.exam.onlineexamapi.mapper.SubjectMapper;
 import com.exam.onlineexamapi.page.MybatisPageHelper;
 import com.exam.onlineexamapi.page.PageRequest;
@@ -37,7 +39,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Subject findById(Long id) {
+    public Subject findById(Integer id) {
         return null;
     }
 
@@ -73,5 +75,15 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Integer updateSubject(SubjectEditDTO subjectEditDTO) {
         return subjectMapper.update(subjectEditDTO);
+    }
+
+    @Override
+    public List<SubjectVO> getSubjectByStuId(Integer id) {
+        return subjectMapper.getSubjectByStuId(id);
+    }
+
+    @Override
+    public Integer deleteSubjectUser(SubjectUserDTO subjectUserDTO) {
+        return subjectMapper.deleteSubjectUser(subjectUserDTO.getSubjectId(),subjectUserDTO.getUserId());
     }
 }

@@ -122,6 +122,35 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/paper',
+    component: Layout,
+    name: 'Paper',
+    meta: {
+      title: '试卷管理',
+      icon: 'el-icon-s-order'
+    },
+    children: [
+      {
+        path: '/paper/list',
+        component: () => import('@/views/paper/list'),
+        name: 'PaperList',
+        meta: {
+          title: '试卷列表',
+          noCache: true
+        }
+      },
+      {
+        path: '/paper/edit',
+        component: () => import('@/views/paper/edit'),
+        name: 'EditPaper',
+        meta: {
+          title: '试卷创编',
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
     path: '/question',
     component: Layout,
     name: 'Question',
@@ -131,7 +160,7 @@ export const constantRoutes = [
     },
     children: [
       {
-        path: '/list',
+        path: '/question/list',
         component: () => import('@/views/question/list'),
         name: 'QuestionList',
         meta: {

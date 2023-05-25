@@ -15,4 +15,17 @@ public interface UserMapper {
     List<User> findBySubject(Integer subjectId);
 
     List<CreateDate> findByDate(Integer createId);
+
+    User findById(Integer userId);
+
+    Integer selectQuestionNum(Integer teacherId);
+    Integer selectSubjectNum(Integer teacherId);
+    Integer selectStudentNum(Integer teacherId);
+    Integer selectPaperNum(Integer teacherId);
+
+    Integer subjectNum2(Integer studentId);
+    Integer paperNum2(Integer studentId);
+    Integer finishPaperNum(Integer studentId);
+    Integer wrongQuestionNum(Integer studentId);
+
 }
