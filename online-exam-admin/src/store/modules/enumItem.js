@@ -9,6 +9,9 @@ const state = {
             { key: 4, value: '/edit/gapFilling', name: '填空题' },
             { key: 5, value: '/edit/shortAnswer', name: '简答题' }]
         },
+        examPaper: {
+            paperTypeEnum: [{ key: 1, value: '固定试卷' }, { key: 2, value: '时段试卷' }, { key: 3, value: '任务试卷' }]
+        }
 
     }
 }

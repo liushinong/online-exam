@@ -32,7 +32,7 @@ public class TextContentServiceImpl implements TextContentService {
     }
 
     @Override
-    public TextContent findById(Long id) {
+    public TextContent findById(Integer id) {
         return textContentMapper.findById(id);
     }
 

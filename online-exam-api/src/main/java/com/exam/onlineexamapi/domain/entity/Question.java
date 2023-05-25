@@ -14,25 +14,25 @@ import java.util.stream.Collectors;
 @Builder
 public class Question {
 
-  private long id;
+  private Integer id;
   private Integer questionType;
-  private Long subjectId;
+  private Integer subjectId;
   private Integer score;
   private Integer gradeLevel;
   private Integer difficult;
   private String correct;
-  private long infoTextContentId;
-  private long createUser;
+  private Integer infoTextContentId;
+  private Integer createUser;
   private Integer status;
   private java.sql.Timestamp createTime;
   private Integer deleted;
 
 
-  public long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -46,11 +46,11 @@ public class Question {
   }
 
 
-  public Long getSubjectId() {
+  public Integer getSubjectId() {
     return subjectId;
   }
 
-  public void setSubjectId(Long subjectId) {
+  public void setSubjectId(Integer subjectId) {
     this.subjectId = subjectId;
   }
 
@@ -91,20 +91,20 @@ public class Question {
   }
 
 
-  public long getInfoTextContentId() {
+  public Integer getInfoTextContentId() {
     return infoTextContentId;
   }
 
-  public void setInfoTextContentId(long infoTextContentId) {
+  public void setInfoTextContentId(Integer infoTextContentId) {
     this.infoTextContentId = infoTextContentId;
   }
 
 
-  public long getCreateUser() {
+  public Integer getCreateUser() {
     return createUser;
   }
 
-  public void setCreateUser(long createUser) {
+  public void setCreateUser(Integer createUser) {
     this.createUser = createUser;
   }
 

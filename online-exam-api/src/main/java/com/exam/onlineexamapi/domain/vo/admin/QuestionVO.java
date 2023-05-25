@@ -13,15 +13,15 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Builder
 public class QuestionVO {
-    private Long id;
+    private Integer id;
     private Integer questionType;
-    private Long subjectId;
+    private Integer subjectId;
     private Integer score;
     private Integer gradeLevel;
     private Integer difficult;
     private String correct;
     private QuestionObject questionObject;
-    private Long createUser;
+    private Integer createUser;
     private Integer status;
     private Timestamp createTime;
 }

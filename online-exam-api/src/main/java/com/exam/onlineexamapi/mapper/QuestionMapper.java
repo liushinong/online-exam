@@ -3,6 +3,7 @@ package com.exam.onlineexamapi.mapper;
 import com.exam.onlineexamapi.domain.entity.Question;
 import com.exam.onlineexamapi.page.PageRequest;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface QuestionMapper {
     List<Question> findPageByType(Integer questionType, Integer teacherId);
 
     List<Question> findPageBySubject(Integer subjectId, Integer teacherId);
+
+    List<Question> selectByIds(@Param("ids") List<Integer> ids);
 }

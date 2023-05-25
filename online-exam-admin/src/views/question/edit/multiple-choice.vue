@@ -63,7 +63,7 @@
       <el-form-item label="难度: " required>
         <el-rate v-model="form.difficult" class="question-item-rate"></el-rate>
       </el-form-item>
-      <el-form-item label="正确答案: " prop="correct" required>
+      <el-form-item label="正确答案: " prop="correctArray" required>
         <el-checkbox-group v-model="form.correctArray">
           <el-checkbox
             v-for="item in form.items"
@@ -139,7 +139,7 @@ export default {
         title: [{ required: true, message: "请输入题干", trigger: "blur" }],
         analyze: [{ required: true, message: "请输入解析", trigger: "blur" }],
         score: [{ required: true, message: "请输入分数", trigger: "blur" }],
-        correct: [
+        correctArray: [
           { required: true, message: "请选择正确答案", trigger: "change" },
         ],
       },
@@ -197,7 +197,7 @@ export default {
               if (res.code == 0) {
                 that.$message.success("操作成功");
                 that.delCurrentView(that).then(() => {
-                  that.$router.push("/list");
+                  that.$router.push("/question/list");
                 });
               } else {
                 that.$message.error("操作失败");

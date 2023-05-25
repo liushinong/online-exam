@@ -4,4 +4,5 @@ import com.exam.onlineexamapi.domain.entity.TextContent;
 
 public interface TextContentService extends CurdService<TextContent>{
     Integer updateById(TextContent textContent);
+//    Integer insertByFilter(TextContent textContent);
 }

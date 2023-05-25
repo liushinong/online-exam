@@ -15,4 +15,5 @@ public interface UserMapper {
     List<User> findBySubject(Integer subjectId);
 
     List<CreateDate> findByDate(Integer createId);
+    User findById(Integer userId);
 }

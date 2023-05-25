@@ -95,4 +95,12 @@
           and s.teacher_id = #{teacherId}
           and s.deleted = 1
     </select>
+    <select id="selectByIds" resultType="com.exam.onlineexamapi.domain.entity.Question">
+        select *
+        from t_question
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

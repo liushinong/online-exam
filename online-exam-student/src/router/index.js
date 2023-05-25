@@ -38,6 +38,10 @@ const routes = [
         component: () => import("@/views/homepage/error.vue"),
       },
     ]
+  },
+  {
+    path: '/do', name: 'ExamPaperDo', component: () => import("@/views/exam/paper/do.vue"),
+    meta: { title: '试卷答题' }
   }
 ]
 

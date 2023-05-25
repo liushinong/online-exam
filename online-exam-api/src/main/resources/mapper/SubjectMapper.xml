@@ -35,4 +35,7 @@
         from t_subject
         where id = #{id}
     </select>
+    <select id="getSubjectByStuId" resultType="com.exam.onlineexamapi.domain.vo.student.SubjectVO">
+        select us.subject_id as id, s.name as name from t_user_subject as us, t_subject as s where us.subject_id = s.id and us.user_id = #{id}
+    </select>
 </mapper>
