@@ -18,4 +18,11 @@
         </where>
     </select>
 
+    <select id="findByDate" resultType="com.exam.onlineexamapi.domain.DO.user.CreateDate">
+        SELECT DATE_FORMAT(create_time,'%y-%m') as yearMonth ,COUNT(id) as num
+        FROM t_question
+        WHERE create_user =#{createId}
+        GROUP BY DATE_FORMAT(create_time,'%y-%m')
+        ORDER BY DATE_FORMAT(create_time, '%y-%m');
+    </select>
 </mapper>

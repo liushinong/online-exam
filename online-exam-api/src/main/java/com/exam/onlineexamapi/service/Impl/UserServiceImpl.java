@@ -25,6 +25,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public RestResult<Object> findByDate(Integer createId) {
+        return new RestResultBuilder<>().success(userMapper.findByDate(createId));
+    }
+
+    @Override
     public int save(User record) {
         return 0;
     }
