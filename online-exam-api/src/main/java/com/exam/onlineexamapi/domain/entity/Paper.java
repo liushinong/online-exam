@@ -3,28 +3,28 @@ package com.exam.onlineexamapi.domain.entity;
 
 public class Paper {
 
-  private long id;
+  private Integer id;
   private String name;
-  private long subjectId;
-  private long paperType;
-  private long gradeLevel;
-  private long score;
-  private long questionCount;
-  private long suggestTime;
+  private Integer subjectId;
+  private Integer paperType;
+  private Integer gradeLevel;
+  private Integer score;
+  private Integer questionCount;
+  private Integer suggestTime;
   private java.sql.Timestamp limitStartTime;
   private java.sql.Timestamp limitEndTime;
-  private long frameTextContentId;
-  private long createUser;
+  private Integer frameTextContentId;
+  private Integer createUser;
   private java.sql.Timestamp createTime;
-  private long deleted;
-  private long taskExamId;
+  private Integer deleted;
+  private Integer taskExamId;
 
 
-  public long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -38,56 +38,56 @@ public class Paper {
   }
 
 
-  public long getSubjectId() {
+  public Integer getSubjectId() {
     return subjectId;
   }
 
-  public void setSubjectId(long subjectId) {
+  public void setSubjectId(Integer subjectId) {
     this.subjectId = subjectId;
   }
 
 
-  public long getPaperType() {
+  public Integer getPaperType() {
     return paperType;
   }
 
-  public void setPaperType(long paperType) {
+  public void setPaperType(Integer paperType) {
     this.paperType = paperType;
   }
 
 
-  public long getGradeLevel() {
+  public Integer getGradeLevel() {
     return gradeLevel;
   }
 
-  public void setGradeLevel(long gradeLevel) {
+  public void setGradeLevel(Integer gradeLevel) {
     this.gradeLevel = gradeLevel;
   }
 
 
-  public long getScore() {
+  public Integer getScore() {
     return score;
   }
 
-  public void setScore(long score) {
+  public void setScore(Integer score) {
     this.score = score;
   }
 
 
-  public long getQuestionCount() {
+  public Integer getQuestionCount() {
     return questionCount;
   }
 
-  public void setQuestionCount(long questionCount) {
+  public void setQuestionCount(Integer questionCount) {
     this.questionCount = questionCount;
   }
 
 
-  public long getSuggestTime() {
+  public Integer getSuggestTime() {
     return suggestTime;
   }
 
-  public void setSuggestTime(long suggestTime) {
+  public void setSuggestTime(Integer suggestTime) {
     this.suggestTime = suggestTime;
   }
 
@@ -110,20 +110,20 @@ public class Paper {
   }
 
 
-  public long getFrameTextContentId() {
+  public Integer getFrameTextContentId() {
     return frameTextContentId;
   }
 
-  public void setFrameTextContentId(long frameTextContentId) {
+  public void setFrameTextContentId(Integer frameTextContentId) {
     this.frameTextContentId = frameTextContentId;
   }
 
 
-  public long getCreateUser() {
+  public Integer getCreateUser() {
     return createUser;
   }
 
-  public void setCreateUser(long createUser) {
+  public void setCreateUser(Integer createUser) {
     this.createUser = createUser;
   }
 
@@ -137,20 +137,20 @@ public class Paper {
   }
 
 
-  public long getDeleted() {
+  public Integer getDeleted() {
     return deleted;
   }
 
-  public void setDeleted(long deleted) {
+  public void setDeleted(Integer deleted) {
     this.deleted = deleted;
   }
 
 
-  public long getTaskExamId() {
+  public Integer getTaskExamId() {
     return taskExamId;
   }
 
-  public void setTaskExamId(long taskExamId) {
+  public void setTaskExamId(Integer taskExamId) {
     this.taskExamId = taskExamId;
   }
 

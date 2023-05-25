@@ -34,7 +34,7 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public Paper findById(Long id) {
+    public Paper findById(Integer id) {
         return null;
     }
 

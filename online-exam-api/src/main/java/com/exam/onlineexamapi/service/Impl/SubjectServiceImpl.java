@@ -38,7 +38,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Subject findById(Long id) {
+    public Subject findById(Integer id) {
         return null;
     }
 

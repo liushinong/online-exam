@@ -181,7 +181,7 @@ public class ExamPaperServiceImpl implements ExamPaperService {
     }
 
     @Override
-    public ExamPaper findById(Long id) {
+    public ExamPaper findById(Integer id) {
         return null;
     }
 

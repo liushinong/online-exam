@@ -12,4 +12,6 @@ public interface UserMapper {
     List<User> findByPage();
 
     List<User> findBySubject(Integer subjectId);
+
+    User findById(Integer userId);
 }

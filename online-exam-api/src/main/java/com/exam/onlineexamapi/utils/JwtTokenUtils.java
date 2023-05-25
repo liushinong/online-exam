@@ -35,7 +35,7 @@ public class JwtTokenUtils {
     /**
      * 有效期12小时
      */
-    private static final long EXPIRE_TIME = 12 * 60 * 60 * 1000;
+    private static final Integer EXPIRE_TIME = 12 * 60 * 60 * 1000;
 
     /**
      * 根据请求令牌获取登录认证信息

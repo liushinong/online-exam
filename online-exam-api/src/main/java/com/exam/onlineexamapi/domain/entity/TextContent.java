@@ -15,7 +15,7 @@ import java.util.Date;
 @Builder
 public class TextContent {
 
-  private long id;
+  private Integer id;
   private String content;
   private java.sql.Timestamp createTime;
 
@@ -25,11 +25,11 @@ public class TextContent {
   }
 
 
-  public long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 

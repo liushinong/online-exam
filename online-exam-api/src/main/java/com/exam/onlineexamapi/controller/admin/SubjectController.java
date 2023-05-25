@@ -35,7 +35,7 @@ public class SubjectController {
     }
 
     @PostMapping("/delete")
-    public RestResult delete(@RequestBody Long id) {
+    public RestResult delete(@RequestBody Integer id) {
         Subject subject = subjectService.findById(id);
         return new RestResultBuilder<>().success(subjectService.delete(subject));
     }

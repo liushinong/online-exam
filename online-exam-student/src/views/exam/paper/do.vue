@@ -69,6 +69,7 @@ import QuestionEdit from '../components/QuestionEdit.vue'
 import { select } from '@/api/examPaper'
 import { formatSeconds } from '@/utils'
 import { mapGetters, mapState } from 'vuex'
+import { answerSubmit } from '@/api/examPaperAnswer'
 export default {
     name: 'do',
     components: {
@@ -78,6 +79,8 @@ export default {
         return {
             form: {},
             answer: {
+                userId: 3,
+                questionId: null,
                 doTime: 0,
                 answerItems: [],
             },
@@ -109,7 +112,27 @@ export default {
             let that = this
             window.clearInterval(that.timer)
             that.formLoading = true
-            
+            answerSubmit(this.answer)
+                .then((res) => {
+                    if (res.data.code == 0) {
+                        that.$alert(
+                            '试卷得分：' + res.data.msg + '分',
+                            '考试结果',
+                            {
+                                confirmButtonText: '返回考试记录',
+                                callback: (action) => {
+                                    that.$router.push('/record/index')
+                                },
+                            },
+                        )
+                    } else {
+                        that.$message.error(res.data.msg)
+                    }
+                    that.formLoading = false
+                })
+                .catch((e) => {
+                    that.formLoading = false
+                })
         },
         formatSeconds(theTime) {
             return formatSeconds(theTime)
@@ -146,13 +169,11 @@ export default {
             return this.enumFormat(this.doCompletedTag, completed)
         },
         goAnchor(selector) {
-            this.$el
-                .querySelector(selector)
-                .scrollIntoView({
-                    behavior: 'instant',
-                    block: 'center',
-                    inline: 'nearest',
-                })
+            this.$el.querySelector(selector).scrollIntoView({
+                behavior: 'instant',
+                block: 'center',
+                inline: 'nearest',
+            })
         },
     },
     computed: {

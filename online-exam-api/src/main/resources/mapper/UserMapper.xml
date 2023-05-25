@@ -17,5 +17,9 @@
          and us.subject_id = #{subjectId}
         </where>
     </select>
+    <select id="findById" resultType="com.exam.onlineexamapi.domain.entity.User">
+        select *
+        from t_user where id = #{userId};
+    </select>
 
 </mapper>

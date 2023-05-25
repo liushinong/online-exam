@@ -1,5 +1,7 @@
 package com.exam.onlineexamapi.domain.enums;
 
+import com.zaxxer.hikari.util.FastList;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,5 +46,16 @@ public enum QuestionTypeEnum {
 
     public static QuestionTypeEnum fromCode(Integer code) {
         return keyMap.get(code);
+    }
+
+    public static boolean needSaveTextContent(Integer code) {
+        QuestionTypeEnum questionTypeEnum = QuestionTypeEnum.fromCode(code);
+        switch (questionTypeEnum) {
+            case GapFilling:
+            case ShortAnswer:
+                return true;
+            default:
+                return false;
+        }
     }
 }

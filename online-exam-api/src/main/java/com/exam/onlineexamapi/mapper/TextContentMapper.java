@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface TextContentMapper {
     Integer insert(TextContent textContent);
 
-    TextContent findById(Long id);
+    TextContent findById(Integer id);
 
     Integer updateById(TextContent textContent);
 }

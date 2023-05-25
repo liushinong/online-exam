@@ -13,7 +13,7 @@ public interface SubjectMapper {
     List<Subject> findPageByTeacherAndName(Integer teacherId, String name);
     Integer insert(Subject subject);
     Integer update(SubjectEditDTO subjectEditDTO);
-    Subject findById(Long id);
-    Integer delete(Long id);
+    Subject findById(Integer id);
+    Integer delete(Integer id);
     List<SubjectVO> getSubjectByStuId(Integer id);
 }

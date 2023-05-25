@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.exam.onlineexamapi.mapper.ExamPaperQuestionCustomerAnswerMapper">
+
+    <insert id="insertList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id" >
+        insert into t_exam_paper_question_customer_answer ( question_id, question_score,
+        subject_id, create_time, create_user,
+        text_content_id, exam_paper_id, question_type,
+        answer, customer_score, exam_paper_answer_id ,
+        do_right,question_text_content_id,item_order)
+        values
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            ( #{item.questionId,jdbcType=INTEGER}, #{item.questionScore,jdbcType=INTEGER},
+            #{item.subjectId,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.createUser,jdbcType=INTEGER},
+            #{item.textContentId,jdbcType=INTEGER}, #{item.examPaperId,jdbcType=INTEGER}, #{item.questionType,jdbcType=INTEGER},
+            #{item.answer,jdbcType=VARCHAR}, #{item.customerScore,jdbcType=INTEGER}, #{item.examPaperAnswerId,jdbcType=INTEGER},
+            #{item.doRight,jdbcType=BIT},#{item.questionTextContentId,jdbcType=INTEGER},#{item.itemOrder,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+</mapper>
