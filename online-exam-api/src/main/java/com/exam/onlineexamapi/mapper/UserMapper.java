@@ -1,5 +1,6 @@
 package com.exam.onlineexamapi.mapper;
 
+import com.exam.onlineexamapi.domain.DO.user.CreateDate;
 import com.exam.onlineexamapi.domain.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,5 +14,6 @@ public interface UserMapper {
 
     List<User> findBySubject(Integer subjectId);
 
+    List<CreateDate> findByDate(Integer createId);
     User findById(Integer userId);
 }
