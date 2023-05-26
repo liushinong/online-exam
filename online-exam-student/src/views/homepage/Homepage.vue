@@ -14,7 +14,7 @@
                 <el-menu-item index="/home">首页</el-menu-item>
                 <el-menu-item index="/paper">试卷中心</el-menu-item>
                 <el-menu-item index="/record">考试记录</el-menu-item>
-                <el-menu-item index="/error">错题本</el-menu-item>
+                <!-- <el-menu-item index="/error">错题本</el-menu-item> -->
             </el-menu>
         </el-header>
         <el-container class="container-content">

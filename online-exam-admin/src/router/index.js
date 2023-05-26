@@ -226,6 +226,45 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/answer',
+    component: Layout,
+    name: 'Answer',
+    meta: {
+      title: '答卷管理',
+      icon: 'el-icon-s-order'
+    },
+    children: [
+      {
+        path: '/checkList',
+        component: () => import('@/views/paper-answer/checkList'),
+        name: 'CheckList',
+        meta: {
+          title: '批改列表',
+          noCache: true
+        }
+      },
+      {
+        path: '/completeList',
+        component: () => import('@/views/paper-answer/completeList'),
+        name: 'CompleteList',
+        meta: {
+          title: '试卷完成',
+          noCache: true
+        }
+      },
+      {
+        path: '/editPaper',
+        component: () => import('@/views/paper-answer/edit'),
+        name: 'EditPaper',
+        hidden: true,
+        meta: {
+          title: '批改试卷',
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
     path: '/error',
     component: Layout,
     redirect: 'noRedirect',

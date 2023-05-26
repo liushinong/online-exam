@@ -11,16 +11,23 @@ import com.exam.onlineexamapi.domain.entity.Question;
 import com.exam.onlineexamapi.domain.enums.ExamPaperAnswerStatusEnum;
 import com.exam.onlineexamapi.domain.enums.ExamPaperTypeEnum;
 import com.exam.onlineexamapi.domain.enums.QuestionTypeEnum;
+import com.exam.onlineexamapi.domain.other.ExamPaperAnswerUpdate;
 import com.exam.onlineexamapi.mapper.ExamPaperAnswerMapper;
 import com.exam.onlineexamapi.mapper.ExamPaperMapper;
 import com.exam.onlineexamapi.mapper.QuestionMapper;
+import com.exam.onlineexamapi.page.MybatisPageHelper;
+import com.exam.onlineexamapi.page.PageRequest;
+import com.exam.onlineexamapi.page.PageResult;
 import com.exam.onlineexamapi.service.ExamPaperAnswerService;
+import com.exam.onlineexamapi.service.ExamPaperQuestionCustomerAnswerService;
 import com.exam.onlineexamapi.service.TextContentService;
 import com.exam.onlineexamapi.utils.ExamUtil;
 import com.exam.onlineexamapi.utils.JsonUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +43,8 @@ public class ExamPaperAnswerServiceImpl implements ExamPaperAnswerService {
     TextContentService textContentService;
     @Resource
     QuestionMapper questionMapper;
+    @Resource
+    ExamPaperQuestionCustomerAnswerService examPaperQuestionCustomerAnswerService;
 
     /**
      * 计算试卷提交结果（不入库）
@@ -49,9 +58,9 @@ public class ExamPaperAnswerServiceImpl implements ExamPaperAnswerService {
         Date now = new Date();
         // 获取试卷
         ExamPaper examPaper = examPaperMapper.selectByPrimaryKey(examPaperSubmitVM.getId());
-        ExamPaperTypeEnum paperTypeEnum = ExamPaperTypeEnum.fromCode((int) examPaper.getPaperType());
+        ExamPaperTypeEnum paperTypeEnum = ExamPaperTypeEnum.fromCode(examPaper.getPaperType());
         // 任务试卷只能做一次
-        if (paperTypeEnum == ExamPaperTypeEnum.Task) {
+        if (paperTypeEnum == ExamPaperTypeEnum.Fixed || paperTypeEnum == ExamPaperTypeEnum.TimeLimit || paperTypeEnum == ExamPaperTypeEnum.Task) {
             ExamPaperAnswer examPaperAnswer = examPaperAnswerMapper.getByPidUid(examPaperSubmitVM.getId(), userId);
             if (null != examPaperAnswer) {
                 return null;
@@ -86,6 +95,61 @@ public class ExamPaperAnswerServiceImpl implements ExamPaperAnswerService {
     @Override
     public Integer insertByFilter(ExamPaperAnswer examPaperAnswer) {
         return examPaperAnswerMapper.insertSelective(examPaperAnswer);
+    }
+
+    /**
+     * 试卷答题信息转成vm传给前端
+     * @param id
+     * @return
+     */
+    @Override
+    public ExamPaperSubmitVM examPaperAnswerToVM(Integer id) {
+        ExamPaperSubmitVM examPaperSubmitVM = new ExamPaperSubmitVM();
+        ExamPaperAnswer examPaperAnswer = examPaperAnswerMapper.selectById(id);
+        examPaperSubmitVM.setId(examPaperAnswer.getId());
+        examPaperSubmitVM.setDoTime(examPaperAnswer.getDoTime());
+        examPaperSubmitVM.setScore(String.valueOf(examPaperAnswer.getUserScore()));
+        List<ExamPaperQuestionCustomerAnswer> examPaperQuestionCustomerAnswers = examPaperQuestionCustomerAnswerService.selectListByPaperAnswerId(examPaperAnswer.getId());
+        List<ExamPaperSubmitItemVM> examPaperSubmitItemVMS = examPaperQuestionCustomerAnswers.stream()
+                .map(a -> examPaperQuestionCustomerAnswerService.examPaperQuestionCustomerAnswerToVM(a))
+                .collect(Collectors.toList());
+        examPaperSubmitVM.setAnswerItems(examPaperSubmitItemVMS);
+        return examPaperSubmitVM;
+    }
+
+    /**
+     * 试卷批改
+     * @param examPaperSubmitVM
+     * @return
+     */
+    @Override
+    @Transactional
+    public String judge(ExamPaperSubmitVM examPaperSubmitVM) {
+        // 获取到试卷答案
+        ExamPaperAnswer examPaperAnswer = examPaperAnswerMapper.selectById(examPaperSubmitVM.getId());
+        // 获取传过来的参数中的 未批改的题目
+        List<ExamPaperSubmitItemVM> judgeItems = examPaperSubmitVM.getAnswerItems().stream().filter(d -> d.getDoRight() == null).collect(Collectors.toList());
+        List<ExamPaperAnswerUpdate> examPaperAnswerUpdates = new ArrayList<>(judgeItems.size());
+        Integer customerScore = examPaperAnswer.getUserScore();
+        Integer questionCorrect = examPaperAnswer.getQuestionCorrect();
+        for (ExamPaperSubmitItemVM d : judgeItems) {
+            ExamPaperAnswerUpdate examPaperAnswerUpdate = new ExamPaperAnswerUpdate();
+            examPaperAnswerUpdate.setId(d.getId());
+            examPaperAnswerUpdate.setCustomerScore(ExamUtil.scoreFromVM(d.getScore()));
+            boolean doRight = examPaperAnswerUpdate.getCustomerScore().equals(ExamUtil.scoreFromVM(d.getQuestionScore()));
+            examPaperAnswerUpdate.setDoRight(doRight);
+            examPaperAnswerUpdates.add(examPaperAnswerUpdate);
+            customerScore += examPaperAnswerUpdate.getCustomerScore();
+            if (examPaperAnswerUpdate.getDoRight()) {
+                questionCorrect++;
+            }
+        }
+        examPaperAnswer.setUserScore(customerScore);
+        examPaperAnswer.setQuestionCorrect(questionCorrect);
+        examPaperAnswer.setStatus(ExamPaperAnswerStatusEnum.Complete.getCode());
+        examPaperAnswerMapper.updateByPrimaryKeySelective(examPaperAnswer);
+        examPaperQuestionCustomerAnswerService.updateScore(examPaperAnswerUpdates);
+        return String.valueOf(customerScore);
     }
 
     /**
@@ -183,5 +247,65 @@ public class ExamPaperAnswerServiceImpl implements ExamPaperAnswerService {
                 examPaperQuestionCustomerAnswer.setCustomerScore(0);
                 break;
         }
+    }
+
+    @Override
+    public int save(ExamPaperAnswer record) {
+        return 0;
+    }
+
+    @Override
+    public int delete(ExamPaperAnswer record) {
+        return 0;
+    }
+
+    @Override
+    public int delete(List<ExamPaperAnswer> records) {
+        return 0;
+    }
+
+    @Override
+    public ExamPaperAnswer findById(Integer id) {
+        return examPaperAnswerMapper.selectById(id);
+    }
+
+    @Override
+    public PageResult findByPage(PageRequest pageRequest) {
+        PageResult pageResult = null;
+        Object teacherId = pageRequest.getParam("teacherId");
+        Object subjectId = pageRequest.getParam("subjectId");
+        if (subjectId != null) {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, examPaperAnswerMapper, "findPageBySubjectAndTeacher", subjectId, teacherId);
+        } else {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, examPaperAnswerMapper, "findPageByTeacher", teacherId);
+        }
+        return pageResult;
+    }
+
+    @Override
+    public PageResult findPageByComplete(PageRequest pageRequest) {
+        PageResult pageResult = null;
+        Object teacherId = pageRequest.getParam("teacherId");
+        Object subjectId = pageRequest.getParam("subjectId");
+        if (subjectId != null) {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, examPaperAnswerMapper, "findPageBySubjectAndTeacherAndComplete", subjectId, teacherId);
+        } else {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, examPaperAnswerMapper, "findPageByTeacherAndComplete", teacherId);
+        }
+        return pageResult;
+    }
+
+    @Override
+    public PageResult findPageByUserId(PageRequest pageRequest) {
+        PageResult pageResult = null;
+        Object userId = pageRequest.getParam("userId");
+        Object subjectId = pageRequest.getParam("subjectId");
+        if (subjectId != null) {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, examPaperAnswerMapper, "findPageBySubjectAndUser", subjectId, userId);
+        } else {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, examPaperAnswerMapper, "findPageByUser", userId);
+        }
+        List<ExamPaperQuestionCustomerAnswer> examPaperQuestionCustomerAnswers = (List<ExamPaperQuestionCustomerAnswer>) pageResult.getContent();
+        return pageResult;
     }
 }

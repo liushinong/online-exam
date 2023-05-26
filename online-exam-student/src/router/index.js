@@ -12,6 +12,11 @@ const routes = [
     component: Login,
   },
   {
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/components/register/Register.vue')
+  },
+  {
     path: '/',
     name: 'Home',
     component: () => import("@/views/homepage/Homepage.vue"),
@@ -42,6 +47,10 @@ const routes = [
   {
     path: '/do', name: 'ExamPaperDo', component: () => import("@/views/exam/paper/do.vue"),
     meta: { title: '试卷答题' }
+  },
+  {
+    path: '/read', name: 'ExamPaperRead', component: () => import("@/views/exam/paper/read.vue"),
+    meta: { title: '查看试卷' }
   }
 ]
 

@@ -20,4 +20,28 @@
             #{item.doRight,jdbcType=BIT},#{item.questionTextContentId,jdbcType=INTEGER},#{item.itemOrder,jdbcType=INTEGER})
         </foreach>
     </insert>
+    <update id="updateScore" parameterType="java.util.List">
+        <foreach collection="list" item="item" separator=";" index="index">
+            update t_exam_paper_question_customer_answer
+            <set>
+                customer_score = #{item.customerScore}, do_right= #{item.doRight}
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
+    <select id="selectListByPaperAnswerId"
+            resultType="com.exam.onlineexamapi.domain.entity.ExamPaperQuestionCustomerAnswer">
+        select *
+        from t_exam_paper_question_customer_answer where exam_paper_answer_id = #{id}
+        order by item_order
+    </select>
+    <select id="findPageBySubjectAndUser"
+            resultType="com.exam.onlineexamapi.domain.entity.ExamPaperQuestionCustomerAnswer">
+        select *
+        from t_exam_paper_question_customer_answer where subject_id = #{subjectId} and create_user = #{userId} and do_right = 0
+    </select>
+    <select id="findPageByUser"
+            resultType="com.exam.onlineexamapi.domain.entity.ExamPaperQuestionCustomerAnswer">
+        select * from t_exam_paper_question_customer_answer where create_user = #{userId} and do_right = 0
+    </select>
 </mapper>
