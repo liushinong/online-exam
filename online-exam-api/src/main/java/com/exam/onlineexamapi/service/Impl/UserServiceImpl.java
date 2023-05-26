@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public RestResult selectAll(Integer teacherId) {
-        DetailVo detailVo =  DetailVo.builder().questionNum(userMapper.selectQuestionNum(teacherId)).
+        DetailVo detailVo = DetailVo.builder().questionNum(userMapper.selectQuestionNum(teacherId)).
                 subjectNum(userMapper.selectSubjectNum(teacherId)).
                 studentNum(userMapper.selectStudentNum(teacherId)).
                 paperNum(userMapper.selectPaperNum(teacherId)).build();
@@ -43,11 +43,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public RestResult selectInformation(Integer studentId) {
-       InformationVo informationVo =InformationVo.builder().subjectNum(userMapper.subjectNum2(studentId)).
-               paperNum(userMapper.paperNum2(studentId)).
-               finishPaperNum(userMapper.finishPaperNum(studentId)).
-               wrongQuestionNum(userMapper.wrongQuestionNum(studentId)).build();
-        return new RestResultBuilder<>().success(informationVo );
+        InformationVo informationVo = InformationVo.builder().subjectNum(userMapper.subjectNum2(studentId)).
+                paperNum(userMapper.paperNum2(studentId)).
+                finishPaperNum(userMapper.finishPaperNum(studentId)).
+                wrongQuestionNum(userMapper.wrongQuestionNum(studentId)).build();
+        return new RestResultBuilder<>().success(informationVo);
     }
 
     @Override
@@ -75,10 +75,9 @@ public class UserServiceImpl implements UserService {
         PageResult pageResult = null;
         Object subjectId = pageRequest.getParam("subjectId");
 
-        if(subjectId!=null){
+        if (subjectId != null) {
             pageResult = MybatisPageHelper.findByPage(pageRequest, userMapper, "findBySubject", subjectId);
-        }
-        else{
+        } else {
             pageResult = MybatisPageHelper.findByPage(pageRequest, userMapper);
         }
         return pageResult;

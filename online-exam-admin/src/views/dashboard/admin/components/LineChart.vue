@@ -3,76 +3,74 @@
 </template>
 
 <script>
-import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
-import resize from './mixins/resize'
-import { findByDate } from '@/api/student'
+import echarts from "echarts";
+require("echarts/theme/macarons"); // echarts theme
+import resize from "./mixins/resize";
+import { findByDate } from "@/api/student";
 
 export default {
   mixins: [resize],
   props: {
     className: {
       type: String,
-      default: 'chart'
+      default: "chart",
     },
     width: {
       type: String,
-      default: '100%'
+      default: "100%",
     },
     height: {
       type: String,
-      default: '350px'
+      default: "350px",
     },
     autoResize: {
       type: Boolean,
-      default: true
+      default: true,
     },
     chartData: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       chart: null,
       datax: [],
-      datay: []
-    }
+      datay: [],
+    };
   },
   watch: {
     chartData: {
       deep: true,
       handler(val) {
-        this.setOptions(val)
-      }
-    }
+        this.setOptions(val);
+      },
+    },
   },
   mounted() {
-    findByDate(2).then((res) => {
-      console.log(res)
+    findByDate(localStorage.getItem("teacherId")).then((res) => {
       for (let i = 0; i < res.data.data.length; i++) {
-        this.datax[i] = res.data.data[i].yearMonth
-        this.datay[i] = res.data.data[i].num
+        this.datax[i] = res.data.data[i].yearMonth;
+        this.datay[i] = res.data.data[i].num;
       }
-      console.log(this.datax)
-      this.setOptions()
-    })
+      this.setOptions();
+    });
 
     this.$nextTick(() => {
-      this.initChart()
-    })
+      this.initChart();
+    });
   },
   beforeDestroy() {
     if (!this.chart) {
-      return
+      return;
     }
-    this.chart.dispose()
-    this.chart = null
+    this.chart.dispose();
+    this.chart = null;
   },
   methods: {
     initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
-      this.setOptions(this.chartData)
+      this.chart = echarts.init(this.$el, "macarons");
+      this.setOptions(this.chartData);
     },
     setOptions() {
       this.chart.setOption({
@@ -80,52 +78,52 @@ export default {
           data: this.datax,
           boundaryGap: false,
           axisTick: {
-            show: false
-          }
+            show: false,
+          },
         },
         grid: {
           left: 10,
           right: 10,
           bottom: 20,
           top: 30,
-          containLabel: true
+          containLabel: true,
         },
         tooltip: {
-          trigger: 'axis',
+          trigger: "axis",
           axisPointer: {
-            type: 'cross'
+            type: "cross",
           },
-          padding: [5, 10]
+          padding: [5, 10],
         },
         yAxis: {
           axisTick: {
-            show: false
-          }
+            show: false,
+          },
         },
         legend: {
-          data: ['expected', 'actual']
+          data: ["expected", "actual"],
         },
         series: [
           {
-            name: '发布题目数',
+            name: "发布题目数",
             itemStyle: {
               normal: {
-                color: '#FF005A',
+                color: "#FF005A",
                 lineStyle: {
-                  color: '#FF005A',
-                  width: 2
-                }
-              }
+                  color: "#FF005A",
+                  width: 2,
+                },
+              },
             },
             smooth: true,
-            type: 'line',
+            type: "line",
             data: this.datay,
             animationDuration: 2800,
-            animationEasing: 'cubicInOut'
-          }
-        ]
-      })
-    }
-  }
-}
+            animationEasing: "cubicInOut",
+          },
+        ],
+      });
+    },
+  },
+};
 </script>

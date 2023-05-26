@@ -8,7 +8,7 @@
  */
 import request from '@/utils/request'
 
-export function login(data) {
+export function login (data) {
   return request({
     url: '/user/login',
     method: 'post',
@@ -16,7 +16,7 @@ export function login(data) {
   })
 }
 
-export function getInfo(token) {
+export function getInfo (token) {
   return request({
     url: '/user/info',
     method: 'get',
@@ -24,19 +24,27 @@ export function getInfo(token) {
   })
 }
 
-export function logout() {
+export function logout () {
   return request({
     url: '/user/logout',
     method: 'post'
   })
 }
 
-export function selectAll(id) {
+export function selectAll (id) {
   return request({
     url: '/admin/user/selectAll',
     method: 'post',
     params: {
       teacherId: id
     }
+  })
+}
+
+export function register (data) {
+  return request({
+    url: '/logon',
+    method: 'post',
+    data
   })
 }

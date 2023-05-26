@@ -8,9 +8,7 @@
       label-position="left"
     >
       <div class="title-container">
-        <h3 class="title">
-          {{ $t("login.title") }}
-        </h3>
+        <h3 class="title">系统注册</h3>
         <lang-select class="set-language" />
       </div>
 
@@ -59,6 +57,29 @@
           </span>
         </el-form-item>
       </el-tooltip>
+      <el-form-item prop="confirmPassword">
+        <span class="svg-container">
+          <svg-icon icon-class="password" />
+        </span>
+        <el-input
+          :key="passwordType"
+          ref="password"
+          v-model="confirmPwd"
+          :type="passwordType"
+          placeholder="确认密码"
+          name="password"
+          tabindex="2"
+          autocomplete="on"
+          @keyup.native="checkCapslock"
+          @blur="capsTooltip = false"
+          @keyup.enter.native="handleLogin"
+        />
+        <span class="show-pwd" @click="showPwd">
+          <svg-icon
+            :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
+          />
+        </span>
+      </el-form-item>
 
       <el-button
         :loading="loading"
@@ -66,15 +87,15 @@
         style="width: 100%; margin-bottom: 30px"
         @click.native.prevent="handleLogin"
       >
-        {{ $t("login.logIn") }}
+        注册
       </el-button>
       <el-button
         type="text"
         size="small"
         style="color: #fff; float: right"
-        @click="$router.push('/register')"
+        @click="$router.push('/login')"
       >
-        暂无账号，去注册
+        已有账号，去登录
       </el-button>
     </el-form>
   </div>
@@ -82,7 +103,7 @@
 
 <script>
 import LangSelect from "@/components/LangSelect";
-
+import { register } from "@/api/user";
 export default {
   name: "Login",
   components: { LangSelect },
@@ -98,12 +119,14 @@ export default {
       loginForm: {
         username: "admin",
         password: "admin",
+        role: 2,
       },
       passwordType: "password",
       capsTooltip: false,
       loading: false,
       redirect: undefined,
       otherQuery: {},
+      confirmPwd: "",
     };
   },
   watch: {
@@ -148,18 +171,18 @@ export default {
     },
     handleLogin() {
       this.loading = true;
-      this.$store
-        .dispatch("user/login", this.loginForm)
-        .then(() => {
-          this.$router.push({
-            path: this.redirect || "/",
-            query: this.otherQuery,
-          });
-          this.loading = false;
-        })
-        .catch(() => {
-          this.loading = false;
+      if (this.loginForm.password == this.confirmPwd) {
+        register(this.loginForm).then((res) => {
+          if (res.code == 0) {
+            this.$message.success("注册成功");
+            this.$router.push({ path: "/login" });
+          } else {
+            this.$message.error("注册失败");
+          }
         });
+      } else {
+        this.$message.error("两次密码不一致");
+      }
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
