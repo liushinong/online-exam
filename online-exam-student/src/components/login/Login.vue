@@ -28,6 +28,13 @@
                     >登录</el-button
                 >
             </div>
+            <el-button
+                type="text"
+                style="color: #fff"
+                @click="$router.push('/register')"
+            >
+                暂无账号，去注册
+            </el-button>
         </el-form>
     </div>
 </template>

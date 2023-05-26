@@ -18,3 +18,12 @@ export function formatSeconds (theTime) {
     }
     return result
 }
+
+/**
+ * 时间格式化
+ * @param {} time 
+ * @returns 
+ */
+export function timeFormat (time) {
+    return time.split("T")[0] + ' ' + time.split("T")[1].split('.')[0]
+}

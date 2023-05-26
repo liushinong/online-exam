@@ -13,7 +13,7 @@
                     <el-radio-button label="3">任务试卷</el-radio-button>
                 </el-radio-group>
             </div>
-            <div class="item-contain">
+            <div class="item-contain" v-show="id == null">
                 <span>试卷科目:</span>
                 <el-radio-group
                     v-model="queryParam.params.subjectId"
@@ -114,11 +114,20 @@ export default {
             total: 30,
             listLoading: false,
             paperList: [],
+            id: null,
         }
     },
     created() {
-        this.initSubject()
         this.queryParam.params.userId = parseInt(localStorage.getItem('userId'))
+        let id = this.$route.query.id
+        this.id = id
+        if (id && parseInt(id) !== 0) {
+            this.queryParam.params.subjectId = parseInt(id)
+            this.search()
+        } else {
+            this.id = null
+            this.initSubject()
+        }
     },
     methods: {
         initSubject() {
@@ -154,7 +163,6 @@ export default {
         search() {
             this.listLoading = true
             pageList(this.queryParam).then((res) => {
-                console.log(res.data)
                 this.paperList = res.data.data.content
                 this.total = res.data.data.totalSize
                 this.queryParam.pageNum = res.data.data.pageNum

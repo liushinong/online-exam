@@ -3,7 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.exam.onlineexamapi.mapper.ExamPaperAnswerMapper">
-    <insert id="insertSelective" parameterType="com.exam.onlineexamapi.domain.entity.ExamPaperAnswer" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSelective" parameterType="com.exam.onlineexamapi.domain.entity.ExamPaperAnswer"
+            useGeneratedKeys="true" keyProperty="id">
         insert into t_exam_paper_answer
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -100,9 +101,113 @@
             </if>
         </trim>
     </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.exam.onlineexamapi.domain.entity.ExamPaperAnswer">
+        update t_exam_paper_answer
+        <set>
+            <if test="examPaperId != null">
+                exam_paper_id = #{examPaperId,jdbcType=INTEGER},
+            </if>
+            <if test="paperName != null">
+                paper_name = #{paperName,jdbcType=VARCHAR},
+            </if>
+            <if test="paperType != null">
+                paper_type = #{paperType,jdbcType=INTEGER},
+            </if>
+            <if test="subjectId != null">
+                subject_id = #{subjectId,jdbcType=INTEGER},
+            </if>
+            <if test="systemScore != null">
+                system_score = #{systemScore,jdbcType=INTEGER},
+            </if>
+            <if test="userScore != null">
+                user_score = #{userScore,jdbcType=INTEGER},
+            </if>
+            <if test="paperScore != null">
+                paper_score = #{paperScore,jdbcType=INTEGER},
+            </if>
+            <if test="questionCorrect != null">
+                question_correct = #{questionCorrect,jdbcType=INTEGER},
+            </if>
+            <if test="questionCount != null">
+                question_count = #{questionCount,jdbcType=INTEGER},
+            </if>
+            <if test="doTime != null">
+                do_time = #{doTime,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="taskExamId != null">
+                task_exam_id = #{taskExamId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 
 
     <select id="getByPidUid" resultType="com.exam.onlineexamapi.domain.entity.ExamPaperAnswer">
-        select * from t_exam_paper_answer where exam_paper_id = #{pid} and create_user = #{uid} limit 1
+        select *
+        from t_exam_paper_answer
+        where exam_paper_id = #{pid}
+          and create_user = #{uid}
+        limit 1
+    </select>
+    <select id="findPageByTeacher" resultType="com.exam.onlineexamapi.domain.entity.ExamPaperAnswer">
+        select tepa.*
+        from t_exam_paper_answer as tepa,
+             t_subject as s
+        where tepa.subject_id = s.id
+          and s.teacher_id = #{teacherId}
+          and tepa.status = 1
+    </select>
+    <select id="findPageBySubjectAndTeacher" resultType="com.exam.onlineexamapi.domain.entity.ExamPaperAnswer">
+        select tepa.*
+        from t_exam_paper_answer as tepa,
+             t_subject as s
+        where tepa.subject_id = s.id
+          and s.teacher_id = #{teacherId}
+          and tepa.subject_id = #{subjectId}
+          and tepa.status = 1
+    </select>
+    <select id="selectById" resultType="com.exam.onlineexamapi.domain.entity.ExamPaperAnswer">
+        select * from t_exam_paper_answer where id = #{id}
+    </select>
+    <select id="findPageByTeacherAndComplete"
+            resultType="com.exam.onlineexamapi.domain.entity.ExamPaperAnswer">
+        select tepa.*
+        from t_exam_paper_answer as tepa,
+             t_subject as s
+        where tepa.subject_id = s.id
+          and s.teacher_id = #{teacherId}
+          and tepa.status = 2
+    </select>
+    <select id="findPageBySubjectAndTeacherAndComplete"
+            resultType="com.exam.onlineexamapi.domain.entity.ExamPaperAnswer">
+        select tepa.*
+        from t_exam_paper_answer as tepa,
+             t_subject as s
+        where tepa.subject_id = s.id
+          and s.teacher_id = #{teacherId}
+          and tepa.subject_id = #{subjectId}
+          and tepa.status = 2
+    </select>
+    <select id="findPageByUser" resultType="com.exam.onlineexamapi.domain.entity.ExamPaperAnswer">
+        select tepa.*
+        from t_exam_paper_answer as tepa
+        where tepa.create_user = #{userId}
+    </select>
+    <select id="findPageBySubjectAndUser" resultType="com.exam.onlineexamapi.domain.entity.ExamPaperAnswer">
+        select tepa.*
+        from t_exam_paper_answer as tepa,
+             t_subject as s
+        where tepa.subject_id = s.id
+          and tepa.create_user = #{userId}
+          and tepa.subject_id = #{subjectId}
     </select>
 </mapper>

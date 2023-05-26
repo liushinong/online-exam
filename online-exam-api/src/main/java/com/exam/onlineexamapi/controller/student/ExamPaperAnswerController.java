@@ -7,6 +7,7 @@ import com.exam.onlineexamapi.domain.entity.User;
 import com.exam.onlineexamapi.domain.entity.UserEventLog;
 import com.exam.onlineexamapi.event.CalculateExamPaperAnswerCompleteEvent;
 import com.exam.onlineexamapi.event.UserEvent;
+import com.exam.onlineexamapi.page.PageRequest;
 import com.exam.onlineexamapi.result.RestResult;
 import com.exam.onlineexamapi.result.RestResultBuilder;
 import com.exam.onlineexamapi.service.ExamPaperAnswerService;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.Date;
 
-@RestController
+@RestController("StudentExamPaperAnswerController")
 @RequestMapping("/student/exam/paper/answer")
 public class ExamPaperAnswerController {
 
@@ -50,4 +51,10 @@ public class ExamPaperAnswerController {
         eventPublisher.publishEvent(new UserEvent(userEventLog));
         return new RestResultBuilder<>().success(scoreVm);
     }
+
+    @PostMapping("/pageList")
+    public RestResult pageList(@RequestBody PageRequest pageRequest) {
+        return new RestResultBuilder<>().success(examPaperAnswerService.findPageByUserId(pageRequest));
+    }
+
 }
