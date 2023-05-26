@@ -14,7 +14,7 @@
         select u.* from t_user_subject us, t_user u
         <where>
             us.user_id = u.id
-         and us.subject_id = #{subjectId}
+            and us.subject_id = #{subjectId}
         </where>
     </select>
     <select id="findById" resultType="com.exam.onlineexamapi.domain.entity.User">
@@ -79,5 +79,16 @@
     SELECT COUNT(id) as wrongQuestionNum
     FROM t_exam_paper_question_customer_answer
     WHERE create_user=#{studentId} and do_right=0
+    </select>
+    <select id="findSubjectByPage" resultType="com.exam.onlineexamapi.domain.entity.Subject">
+    SELECT  s.*
+    FROM t_user_subject as us , t_subject as s
+    WHERE us.subject_id=s.id and us.user_id=#{studentId}
+    </select>
+
+    <select id="fuzzyQuery" resultType="com.exam.onlineexamapi.domain.entity.Subject">
+    SELECT  s.*
+    FROM t_user_subject as us , t_subject as s
+    WHERE us.subject_id=s.id and us.user_id=#{studentId} and s.name LIKE concat('%', #{search}, '%')
     </select>
 </mapper>

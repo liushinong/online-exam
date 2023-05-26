@@ -1,6 +1,7 @@
 package com.exam.onlineexamapi.mapper;
 
 import com.exam.onlineexamapi.domain.DO.user.CreateDate;
+import com.exam.onlineexamapi.domain.entity.Subject;
 import com.exam.onlineexamapi.domain.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,21 +16,29 @@ public interface UserMapper {
     List<User> findBySubject(Integer subjectId);
 
     List<CreateDate> findByDate(Integer createId);
-<<<<<<< HEAD
+
 
     User findById(Integer userId);
 
+    List<Subject> findSubjectByPage(Integer studentId);
+
+    List<Subject> fuzzyQuery(Integer studentId, String search);
+
     Integer selectQuestionNum(Integer teacherId);
+
     Integer selectSubjectNum(Integer teacherId);
+
     Integer selectStudentNum(Integer teacherId);
+
     Integer selectPaperNum(Integer teacherId);
 
     Integer subjectNum2(Integer studentId);
+
     Integer paperNum2(Integer studentId);
+
     Integer finishPaperNum(Integer studentId);
+
     Integer wrongQuestionNum(Integer studentId);
 
-=======
-    User findById(Integer userId);
->>>>>>> 61aee70d8db5fac36473f87157d310c3f43d9103
+
 }
