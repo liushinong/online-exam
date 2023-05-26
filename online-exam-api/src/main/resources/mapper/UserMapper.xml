@@ -29,4 +29,55 @@
         GROUP BY DATE_FORMAT(create_time,'%y-%m')
         ORDER BY DATE_FORMAT(create_time, '%y-%m');
     </select>
+
+    <select id="selectQuestionNum" resultType="integer">
+        SELECT COUNT(id) as questionNum
+        FROM t_question
+        WHERE create_user=#{teacherId}
+    </select>
+
+    <select id="selectSubjectNum" resultType="integer">
+        SELECT COUNT(id) as subjectNum
+        FROM t_subject
+        WHERE teacher_id=#{teacherId}
+    </select>
+
+    <select id="selectStudentNum" resultType="integer">
+        SELECT COUNT(us.user_id) as studentNum
+        FROM t_subject as s ,t_user_subject as us
+        WHERE s.id=us.subject_id and s.teacher_id=#{teacherId}
+
+    </select>
+    <select id="selectPaperNum" resultType="integer">
+        SELECT COUNT(ep.id) as paperNum
+        FROM t_subject as s ,t_exam_paper as ep
+        WHERE ep.subject_id=s.id and s.teacher_id=#{teacherId}
+    </select>
+
+    <select id="subjectNum2" resultType="integer">
+
+    SELECT COUNT(id) as subjectNum
+    FROM t_user_subject
+    WHERE user_id=#{studentId}
+
+    </select>
+
+    <select id="paperNum2" resultType="integer">
+    SELECT COUNT(ep.id) as paperNum
+    FROM t_exam_paper as ep ,t_user_subject as us
+    WHERE ep.subject_id=us.subject_id and us.user_id=#{studentId}
+
+    </select>
+
+    <select id="finishPaperNum" resultType="integer">
+    SELECT COUNT(id) as finishPaperNum
+    FROM t_exam_paper_answer
+    WHERE create_user=#{studentId}
+    </select>
+
+    <select id="wrongQuestionNum" resultType="integer">
+    SELECT COUNT(id) as wrongQuestionNum
+    FROM t_exam_paper_question_customer_answer
+    WHERE create_user=#{studentId} and do_right=0
+    </select>
 </mapper>

@@ -33,3 +33,11 @@ export function addSubject(data) {
     data
   })
 }
+
+export function deleteSubjectUser(data) {
+  return request({
+    url: '/admin/subject/deleteSubjectUser',
+    method: 'post',
+    data
+  })
+}

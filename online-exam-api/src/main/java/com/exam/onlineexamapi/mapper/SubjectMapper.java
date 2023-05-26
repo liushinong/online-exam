@@ -16,4 +16,5 @@ public interface SubjectMapper {
     Subject findById(Integer id);
     Integer delete(Integer id);
     List<SubjectVO> getSubjectByStuId(Integer id);
+    Integer deleteSubjectUser(Integer subjectId,Integer userId);
 }

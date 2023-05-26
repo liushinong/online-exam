@@ -7,4 +7,8 @@ public interface UserService extends CurdService<User>{
     RestResult findByName(String username);
 
     RestResult<Object> findByDate(Integer createId);
+
+    RestResult selectAll(Integer teacherId);
+
+    RestResult selectInformation(Integer studentId);
 }

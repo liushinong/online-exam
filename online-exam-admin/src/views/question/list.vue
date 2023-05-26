@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParam" ref="queryForm" :inline="true">
+    <el-form ref="queryForm" :model="queryParam" :inline="true">
       <el-form-item label="学科: ">
         <el-select v-model="queryParam.params.subjectId" clearable>
           <el-option
@@ -8,7 +8,7 @@
             :key="item.id"
             :value="item.id"
             :label="item.name"
-          ></el-option>
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="题型">
@@ -18,7 +18,7 @@
             :key="item.key"
             :value="item.key"
             :label="item.value"
-          ></el-option>
+          />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -65,10 +65,9 @@
           <el-button
             size="mini"
             type="danger"
-            @click="deleteQuestion(row)"
             class="link-left"
-            >删除</el-button
-          >
+            @click="deleteQuestion(row)"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -84,34 +83,34 @@
       style="width: 100%; height: 100%"
     >
       <QuestionShow
-        :qType="questionShow.qType"
+        :q-type="questionShow.qType"
         :question="questionShow.question"
-        :qLoading="questionShow.loading"
+        :q-loading="questionShow.loading"
       />
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from "vuex";
-import { pageList, selectById, del } from "@/api/question";
-import { timeFormat } from "@/utils/util";
-import QuestionShow from "./components/Show";
-import Pagination from "@/components/Pagination";
+import { mapActions, mapState, mapGetters } from 'vuex'
+import { pageList, selectById, del } from '@/api/question'
+import { timeFormat } from '@/utils/util'
+import QuestionShow from './components/Show'
+import Pagination from '@/components/Pagination'
 export default {
-  name: "list",
+  name: 'List',
   components: {
     QuestionShow,
-    Pagination,
+    Pagination
   },
   data() {
     return {
       queryParam: {
         params: {
-          teacherId: 2,
+          teacherId: 2
         },
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 10
       },
       listLoading: false,
       tableData: [],
@@ -119,82 +118,82 @@ export default {
         qType: 0,
         dialog: false,
         question: null,
-        loading: false,
+        loading: false
       },
-      total: 0,
-    };
+      total: 0
+    }
   },
   created() {
-    this.initSubject();
-    this.search();
+    this.initSubject()
+    this.search()
   },
   methods: {
     search() {
-      let that = this;
-      this.listLoading = true;
-      if (this.queryParam.params.questionType == "") {
-        this.queryParam.params.questionType = null;
+      const that = this
+      this.listLoading = true
+      if (this.queryParam.params.questionType == '') {
+        this.queryParam.params.questionType = null
       }
-      if (this.queryParam.params.subjectId == "") {
-        this.queryParam.params.subjectId = null;
+      if (this.queryParam.params.subjectId == '') {
+        this.queryParam.params.subjectId = null
       }
       pageList(this.queryParam).then((res) => {
-        that.tableData = res.data.content;
-        that.listLoading = false;
-        that.total = res.data.totalSize;
-        that.queryParam.pageNum = res.data.pageNum;
-      });
+        that.tableData = res.data.content
+        that.listLoading = false
+        that.total = res.data.totalSize
+        that.queryParam.pageNum = res.data.pageNum
+      })
     },
     submitForm() {
-      this.queryParam.pageNum = 1;
-      this.search();
+      this.queryParam.pageNum = 1
+      this.search()
     },
     subjectFormatter(row, column, cellValue, index) {
-      return this.subjectEnumFormat(cellValue);
+      return this.subjectEnumFormat(cellValue)
     },
     questionTypeFormatter(row, column, cellValue, index) {
-      return this.enumFormat(this.questionType, cellValue);
+      return this.enumFormat(this.questionType, cellValue)
     },
-    ...mapActions("exam", { initSubject: "initSubject" }),
+    ...mapActions('exam', { initSubject: 'initSubject' }),
     timeFormatter(row, column, cellValue, index) {
-      return timeFormat(cellValue);
+      return timeFormat(cellValue)
     },
     showQuestion(row) {
-      let that = this;
-      this.questionShow.loading = true;
-      this.questionShow.qType = row.questionType;
+      const that = this
+      this.questionShow.loading = true
+      this.questionShow.qType = row.questionType
       selectById(row.id).then((res) => {
-        this.questionShow.dialog = true;
-        that.questionShow.question = res.data;
-        that.questionShow.loading = false;
-      });
+        this.questionShow.dialog = true
+        that.questionShow.question = res.data
+        that.questionShow.loading = false
+      })
     },
     editQuestion(row) {
-      let url = this.enumFormat(this.editUrlEnum, row.questionType);
-      this.$router.push({ path: url, query: { id: row.id } });
+      const url = this.enumFormat(this.editUrlEnum, row.questionType)
+      this.$router.push({ path: url, query: { id: row.id }})
     },
     deleteQuestion(row) {
-      let that = this;
+      const that = this
       del(row.id).then((res) => {
         if (res.code == 0) {
-          that.search();
-          that.$message.success("操作成功");
+          that.search()
+          that.$message.success('操作成功')
         } else {
-          that.$message.error("操作失败");
+          that.$message.error('操作失败')
         }
-      });
-    },
+      })
+    }
   },
   computed: {
-    ...mapState("exam", { subjectFilter: (state) => state.subjects }),
-    ...mapGetters("exam", ["subjectEnumFormat"]),
-    ...mapGetters("enumItem", ["enumFormat"]),
-    ...mapState("enumItem", {
+    ...mapState('exam', { subjectFilter: (state) => state.subjects }),
+    ...mapGetters('exam', ['subjectEnumFormat']),
+    ...mapGetters('enumItem', ['enumFormat']),
+    ...mapState('enumItem', {
       questionType: (state) => state.exam.question.typeEnum,
-      editUrlEnum: (state) => state.exam.question.editUrlEnum,
-    }),
-  },
-};
+      editUrlEnum: (state) => state.exam.question.editUrlEnum
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>

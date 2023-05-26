@@ -1,6 +1,7 @@
 package com.exam.onlineexamapi.controller.admin;
 
 import com.exam.onlineexamapi.domain.dto.admin.question.SubjectEditDTO;
+import com.exam.onlineexamapi.domain.dto.admin.subject.SubjectUserDTO;
 import com.exam.onlineexamapi.domain.entity.Subject;
 import com.exam.onlineexamapi.page.PageRequest;
 import com.exam.onlineexamapi.result.RestResult;
@@ -39,4 +40,10 @@ public class SubjectController {
         Subject subject = subjectService.findById(id);
         return new RestResultBuilder<>().success(subjectService.delete(subject));
     }
+
+    @PostMapping("/deleteSubjectUser")
+    public RestResult delectSubjectUser(@RequestBody SubjectUserDTO subjectUserDTO){
+        return new RestResultBuilder<>().success(subjectService.deleteSubjectUser(subjectUserDTO));
+    }
+
 }

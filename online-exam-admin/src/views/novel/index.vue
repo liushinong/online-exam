@@ -42,8 +42,7 @@
             size="small"
             type="primary"
             @click="btnView(scope.row)"
-          >查看</el-button>
-          <el-button type="danger" size="small">编辑</el-button>
+          >移除该学生</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -63,6 +62,7 @@
 <script>
 import { findStudent } from '@/api/student'
 import { findSubjectBT } from '@/api/student'
+import { deleteSubjectUser } from '@/api/subject'
 
 export default {
   data() {
@@ -155,9 +155,16 @@ export default {
       this.currentPage = currentPage
       this.init()
     },
-    // 查看按钮
+    // 移除学生按钮
     btnView(row) {
       console.log(row)
+      var data = {
+        userId: row.id,
+        subjectId: this.value
+      }
+      deleteSubjectUser(data).then((res) => {
+        console.log(res)
+      })
     },
     // 爬取
     crawlNovel() {

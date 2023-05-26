@@ -1,6 +1,7 @@
 package com.exam.onlineexamapi.service.Impl;
 
 import com.exam.onlineexamapi.domain.dto.admin.question.SubjectEditDTO;
+import com.exam.onlineexamapi.domain.dto.admin.subject.SubjectUserDTO;
 import com.exam.onlineexamapi.domain.entity.Subject;
 import com.exam.onlineexamapi.domain.vo.student.SubjectVO;
 import com.exam.onlineexamapi.mapper.SubjectMapper;
@@ -79,5 +80,10 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public List<SubjectVO> getSubjectByStuId(Integer id) {
         return subjectMapper.getSubjectByStuId(id);
+    }
+
+    @Override
+    public Integer deleteSubjectUser(SubjectUserDTO subjectUserDTO) {
+        return subjectMapper.deleteSubjectUser(subjectUserDTO.getSubjectId(),subjectUserDTO.getUserId());
     }
 }
