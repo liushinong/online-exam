@@ -1,6 +1,7 @@
 package com.exam.onlineexamapi.controller;
 
 import com.exam.onlineexamapi.domain.dto.LoginDTO;
+import com.exam.onlineexamapi.domain.dto.LogonDTO;
 import com.exam.onlineexamapi.domain.entity.User;
 import com.exam.onlineexamapi.domain.vo.admin.LoginVO;
 import com.exam.onlineexamapi.mapper.UserMapper;
@@ -67,7 +68,7 @@ public class LoginController {
     }
 
     @PostMapping("/logon")
-    public RestResult logon(@RequestBody LoginDTO loginDTO) {
-        return loginService.logon(loginDTO);
+    public RestResult logon(@RequestBody LogonDTO logonDTO) {
+        return loginService.logon(logonDTO);
     }
 }

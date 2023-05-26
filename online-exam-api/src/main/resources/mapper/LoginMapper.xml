@@ -6,6 +6,6 @@
 
 
     <insert id="logon">
-        insert into t_user(user_name, password, salt) values (#{username}, #{password}, #{salt})
+        insert into t_user(user_name, password, salt, role) values (#{username}, #{password}, #{salt}, #{role})
     </insert>
 </mapper>

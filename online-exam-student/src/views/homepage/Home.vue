@@ -7,9 +7,13 @@
                     alt=""
                 />
             </div>
-            <p>用户名: admin</p>
-            <p>学 &nbsp;号: admin</p>
+            <p>用户id: {{ userId }}</p>
+            <p>用户名: {{ username }}</p>
+            <!-- <p>学 &nbsp;号: admin</p> -->
             <!-- <p>南京工业职业技术大学</p> -->
+            <el-button @click="logout" type="text" size="small"
+                >退出登录</el-button
+            >
         </el-aside>
         <el-main>
             <el-header class="main-header" height="130px">
@@ -52,7 +56,10 @@
                 >
                     <div class="item-info">
                         <div class="img-box">
-                            <img :src="item.img" alt="" />
+                            <img
+                                src="https://xuekaikai.oss-cn-shanghai.aliyuncs.com/campus_navigatic/1.png"
+                                alt=""
+                            />
                         </div>
                         <div class="item-content">
                             <h3>{{ item.title }}</h3>
@@ -63,7 +70,17 @@
                             </div>
                         </div>
                     </div>
-                    <el-button round size="medium">进入</el-button>
+                    <el-button
+                        round
+                        size="medium"
+                        @click="
+                            $router.push({
+                                path: '/paper',
+                                query: { id: item.subjectId },
+                            })
+                        "
+                        >进入</el-button
+                    >
                 </div>
             </el-main>
         </el-main>
@@ -83,6 +100,7 @@
 </template>
 <script>
 import { Message } from 'element-ui'
+import Cookies from 'js-cookie'
 export default {
     data() {
         return {
@@ -137,7 +155,13 @@ export default {
             ],
             dialogVisible: false,
             subjectCode: '',
+            username: '',
+            userId: '',
         }
+    },
+    created() {
+        this.username = localStorage.getItem('username')
+        this.userId = localStorage.getItem('userId')
     },
     methods: {
         joinSubject() {
@@ -146,6 +170,12 @@ export default {
                 message: '加入班级成功',
                 type: 'success',
             })
+        },
+        logout() {
+            localStorage.removeItem('userId'),
+                localStorage.removeItem('username')
+            Cookies.remove('token')
+            this.$router.push({ path: '/login' })
         },
     },
 }

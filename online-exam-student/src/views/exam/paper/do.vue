@@ -115,16 +115,12 @@ export default {
             answerSubmit(this.answer)
                 .then((res) => {
                     if (res.data.code == 0) {
-                        that.$alert(
-                            '试卷得分：' + res.data.msg + '分',
-                            '考试结果',
-                            {
-                                confirmButtonText: '返回考试记录',
-                                callback: (action) => {
-                                    that.$router.push('/record/index')
-                                },
+                        that.$alert('提交成功', {
+                            confirmButtonText: '返回考试记录',
+                            callback: (action) => {
+                                that.$router.push('/record/index')
                             },
-                        )
+                        })
                     } else {
                         that.$message.error(res.data.msg)
                     }
