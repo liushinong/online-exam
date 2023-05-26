@@ -70,36 +70,36 @@
 </template>
 
 <script>
-import CountTo from "vue-count-to";
-import { selectAll } from "@/api/user";
+import CountTo from 'vue-count-to'
+import { selectAll } from '@/api/user'
 
 export default {
+  components: {
+    CountTo
+  },
   data() {
     return {
-      questionNum: "",
-      subjectNum: "",
-      studentNum: "",
-      paperNum: "",
-    };
-  },
-  components: {
-    CountTo,
-  },
-  methods: {
-    handleSetLineChartData(type) {
-      this.$emit("handleSetLineChartData", type);
-    },
+      questionNum: '',
+      subjectNum: '',
+      studentNum: '',
+      paperNum: ''
+    }
   },
   created() {
     selectAll(2).then((res) => {
-      console.log(res);
-      this.questionNum = res.data.data.questionNum;
-      this.subjectNum = res.data.data.subjectNum;
-      this.studentNum = res.data.data.studentNum;
-      this.paperNum = res.data.data.paperNum;
-    });
+      console.log(res)
+      this.questionNum = res.data.data.questionNum
+      this.subjectNum = res.data.data.subjectNum
+      this.studentNum = res.data.data.studentNum
+      this.paperNum = res.data.data.paperNum
+    })
   },
-};
+  methods: {
+    handleSetLineChartData(type) {
+      this.$emit('handleSetLineChartData', type)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

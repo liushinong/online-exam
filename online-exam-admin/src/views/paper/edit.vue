@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form
-      :model="form"
       ref="form"
-      label-width="100px"
       v-loading="formLoading"
+      :model="form"
+      label-width="100px"
       :rules="rules"
     >
       <el-form-item label="学科: " prop="subjectId" required>
@@ -14,7 +14,7 @@
             :key="item.id"
             :value="item.id"
             :label="item.name"
-          ></el-option>
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="试卷类型: " prop="paperType" required>
@@ -24,10 +24,10 @@
             :key="item.key"
             :value="item.key"
             :label="item.value"
-          ></el-option>
+          />
         </el-select>
       </el-form-item>
-      <el-form-item label="时间限制: " required v-show="form.paperType === 2">
+      <el-form-item v-show="form.paperType === 2" label="时间限制: " required>
         <el-date-picker
           v-model="form.limitDateTime"
           value-format="yyyy-MM-dd HH:mm:ss"
@@ -35,34 +35,32 @@
           range-separator="至"
           start-placeholde="开始日期"
           end-placeholde="结束日期"
-        ></el-date-picker>
+        />
       </el-form-item>
       <el-form-item label="试卷名称: " required prop="name">
-        <el-input v-model="form.name"></el-input>
+        <el-input v-model="form.name" />
       </el-form-item>
       <el-form-item
         v-for="(titleItem, index) in form.titleItems"
-        required
         :key="index"
+        required
         :label="'标题' + (index + 1) + ': '"
       >
-        <el-input v-model="titleItem.name" style="width: 80%"></el-input>
+        <el-input v-model="titleItem.name" style="width: 80%" />
         <el-button
           type="success"
           class="link-left"
           style="margin-left: 20px"
           @click="addQuestion(titleItem)"
-          >添加题目</el-button
-        >
+        >添加题目</el-button>
         <el-button
           type="danger"
           class="link-left"
           @click="form.titleItems.splice(index, 1)"
-          >删除</el-button
-        >
+        >删除</el-button>
         <el-card
-          class="exampaper-item-box"
           v-if="titleItem.questionItems.length != 0"
+          class="exampaper-item-box"
         >
           <el-form-item
             v-for="(questionItem, questionIndex) in titleItem.questionItems"
@@ -73,7 +71,7 @@
             <el-row>
               <el-col :span="23">
                 <QuestionShow
-                  :qType="questionItem.questionType"
+                  :q-type="questionItem.questionType"
                   :question="questionItem"
                 />
               </el-col>
@@ -82,15 +80,14 @@
                   type="danger"
                   size="small"
                   @click="titleItem.questionItems.splice(questionIndex, 1)"
-                  >删除</el-button
-                >
+                >删除</el-button>
               </el-col>
             </el-row>
           </el-form-item>
         </el-card>
       </el-form-item>
       <el-form-item label="建议时长: " prop="suggestTime" required>
-        <el-input v-model="form.suggestTime" placeholder="分钟"></el-input>
+        <el-input v-model="form.suggestTime" placeholder="分钟" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm">提交</el-button>
@@ -99,7 +96,7 @@
       </el-form-item>
     </el-form>
     <el-dialog :visible.sync="questionPage.showDialog" width="70%" top="5vh">
-      <el-form :model="questionPage.queryParam" ref="queryForm" :inline="true">
+      <el-form ref="queryForm" :model="questionPage.queryParam" :inline="true">
         <el-form-item label="题型: ">
           <el-select
             v-model="questionPage.queryParam.params.questionType"
@@ -110,7 +107,7 @@
               :key="item.key"
               :value="item.key"
               :label="item.value"
-            ></el-option>
+            />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -120,25 +117,25 @@
       <el-table
         v-loading="questionPage.listLoading"
         :data="questionPage.tableData"
-        @selection-change="handleSelectionChange"
         border
         fit
         highlight-current-row
         style="width: 100%"
+        @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="35"></el-table-column>
-        <el-table-column prop="id" label="Id" width="60px"></el-table-column>
+        <el-table-column type="selection" width="35" />
+        <el-table-column prop="id" label="Id" width="60px" />
         <el-table-column
           prop="questionType"
           label="题型"
           :formatter="questionTypeFormatter"
           width="70px"
-        ></el-table-column>
+        />
         <el-table-column
           prop="questionObject.titleContent"
           label="题干"
           show-overflow-tooltip
-        ></el-table-column>
+        />
       </el-table>
       <pagination
         v-show="questionPage.total > 0"
@@ -149,24 +146,25 @@
       />
       <span slot="footer" class="dialog-footer">
         <el-button @click="questionPage.showDialog = false">取消</el-button>
-        <el-button type="primary" @click="confirmQuestionSelect"
-          >确定</el-button
-        >
+        <el-button
+          type="primary"
+          @click="confirmQuestionSelect"
+        >确定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from "vuex";
-import QuestionShow from "../question/components/Show";
-import Pagination from "@/components/Pagination";
-import { pageList, selectById } from "@/api/question";
-import { edit, select } from "@/api/paper";
+import { mapGetters, mapState, mapActions } from 'vuex'
+import QuestionShow from '../question/components/Show'
+import Pagination from '@/components/Pagination'
+import { pageList, selectById } from '@/api/question'
+import { edit, select } from '@/api/paper'
 export default {
   components: {
     QuestionShow,
-    Pagination,
+    Pagination
   },
   data() {
     return {
@@ -176,21 +174,21 @@ export default {
         subjectId: null,
         paperType: null,
         limitDateTime: [],
-        name: "",
-        titleItems: [],
+        name: '',
+        titleItems: []
       },
       formLoading: false,
       rules: {
         subjectId: [
-          { required: true, message: "请选择学科", trigger: "change" },
+          { required: true, message: '请选择学科', trigger: 'change' }
         ],
         paperType: [
-          { required: true, message: "请选择试卷类型", trigger: "change" },
+          { required: true, message: '请选择试卷类型', trigger: 'change' }
         ],
-        name: [{ required: true, message: "请输入试卷名称", trigger: "blur" }],
+        name: [{ required: true, message: '请输入试卷名称', trigger: 'blur' }],
         suggestTime: [
-          { required: true, message: "请输入建议时长", trigger: "blur" },
-        ],
+          { required: true, message: '请输入建议时长', trigger: 'blur' }
+        ]
       },
       subjectFilter: null,
       currentTitleItem: null,
@@ -200,69 +198,69 @@ export default {
         queryParam: {
           params: {
             teacherId: 2,
-            questionType: "",
+            questionType: ''
           },
           pageNum: 1,
-          pageSize: 5,
+          pageSize: 5
         },
         listLoading: false,
         tableData: [],
-        total: 0,
-      },
-    };
+        total: 0
+      }
+    }
   },
   computed: {
-    ...mapState("enumItem", {
+    ...mapState('enumItem', {
       paperTypeEnum: (state) => state.exam.examPaper.paperTypeEnum,
-      questionTypeEnum: (state) => state.exam.question.typeEnum,
+      questionTypeEnum: (state) => state.exam.question.typeEnum
     }),
-    ...mapState("exam", { subjects: (state) => state.subjects }),
-    ...mapGetters("enumItem", ["enumFormat"]),
+    ...mapState('exam', { subjects: (state) => state.subjects }),
+    ...mapGetters('enumItem', ['enumFormat'])
   },
   created() {
-    let id = this.$route.query.id;
-    let that = this;
-    this.initSubject(function () {
-      that.subjectFilter = that.subjects;
-    });
+    const id = this.$route.query.id
+    const that = this
+    this.initSubject(function() {
+      that.subjectFilter = that.subjects
+    })
     if (id && parseInt(id) !== 0) {
-      that.formLoading = true;
+      that.formLoading = true
       select(id).then((res) => {
-        that.form = res.data;
-        that.formLoading = false;
-      });
+        that.form = res.data
+        that.formLoading = false
+      })
     }
   },
   methods: {
     addQuestion(titleItem) {
-      this.currentTitleItem = titleItem;
-      this.questionPage.showDialog = true;
-      this.search();
+      this.currentTitleItem = titleItem
+      this.questionPage.showDialog = true
+      this.search()
     },
     submitForm() {
-      let that = this;
+      const that = this
       this.$refs.form.validate((valid) => {
         if (valid) {
-          this.formLoading = true;
+          this.formLoading = true
           edit(this.form)
             .then((res) => {
               if (res.code == 0) {
-                that.$message.success("操作成功");
+                that.$message.success('操作成功')
                 that.delCurrentView(that).then(() => {
-                  that.$router.push("/paper/list");
-                });
+                  that.$router.push('/paper/list')
+                })
               } else {
-                that.$message.error("操作失败");
-                this.formLoading = false;
+                that.$message.error('操作失败')
+                this.formLoading = false
               }
             })
             .catch((e) => {
-              this.formLoading = false;
-            });
+              this.formLoading = false
+            })
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
     resetForm() {
       this.form = {
@@ -271,50 +269,50 @@ export default {
         subjectId: null,
         paperType: null,
         limitDateTime: [],
-        name: "",
-        titleItems: [],
-      };
+        name: '',
+        titleItems: []
+      }
     },
     addTitle() {
       this.form.titleItems.push({
-        name: "",
-        questionItems: [],
-      });
+        name: '',
+        questionItems: []
+      })
     },
     queryForm() {},
     handleSelectionChange(val) {
-      this.questionPage.multipleSelection = val;
+      this.questionPage.multipleSelection = val
     },
     confirmQuestionSelect() {
-      let that = this;
+      const that = this
       this.questionPage.multipleSelection.forEach((q) => {
         selectById(q.id).then((res) => {
-          that.currentTitleItem.questionItems.push(res.data);
-        });
-      });
-      this.questionPage.showDialog = false;
+          that.currentTitleItem.questionItems.push(res.data)
+        })
+      })
+      this.questionPage.showDialog = false
     },
     search() {
-      this.questionPage.queryParam.params.subjectId = this.form.subjectId;
-      this.questionPage.listLoading = true;
-      if (this.questionPage.queryParam.params.questionType == "") {
-        this.questionPage.queryParam.params.questionType = null;
+      this.questionPage.queryParam.params.subjectId = this.form.subjectId
+      this.questionPage.listLoading = true
+      if (this.questionPage.queryParam.params.questionType == '') {
+        this.questionPage.queryParam.params.questionType = null
       }
       pageList(this.questionPage.queryParam).then((res) => {
-        console.log(res);
-        this.questionPage.tableData = res.data.content;
-        this.questionPage.total = res.data.totalSize;
-        this.questionPage.queryParam.pageNum = res.data.pageNum;
-        this.questionPage.listLoading = false;
-      });
+        console.log(res)
+        this.questionPage.tableData = res.data.content
+        this.questionPage.total = res.data.totalSize
+        this.questionPage.queryParam.pageNum = res.data.pageNum
+        this.questionPage.listLoading = false
+      })
     },
     questionTypeFormatter(row, column, cellValue, index) {
-      return this.enumFormat(this.questionTypeEnum, cellValue);
+      return this.enumFormat(this.questionTypeEnum, cellValue)
     },
-    ...mapActions("exam", { initSubject: "initSubject" }),
-    ...mapActions("tagsView", { delCurrentView: "delCurrentView" }),
-  },
-};
+    ...mapActions('exam', { initSubject: 'initSubject' }),
+    ...mapActions('tagsView', { delCurrentView: 'delCurrentView' })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

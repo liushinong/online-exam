@@ -38,9 +38,11 @@
 
       <el-table-column fixed="right" label="操作" width="150" align="center">
         <template slot-scope="scope">
-          <el-button size="small" type="primary" @click="btnView(scope.row)"
-            >移除该学生</el-button
-          >
+          <el-button
+            size="small"
+            type="primary"
+            @click="btnView(scope.row)"
+          >移除该学生</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -58,9 +60,9 @@
 </template>
 
 <script>
-import { findStudent } from "@/api/student";
-import { findSubjectBT } from "@/api/student";
-import { deleteSubjectUser } from "@/api/subject";
+import { findStudent } from '@/api/student'
+import { findSubjectBT } from '@/api/student'
+import { deleteSubjectUser } from '@/api/subject'
 
 export default {
   data() {
@@ -73,59 +75,59 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 50,
-      searchText: "",
-      l: "",
+      searchText: '',
+      l: '',
       options: [],
-      value: "",
-    };
+      value: ''
+    }
   },
   created() {
-    this.init();
+    this.init()
     var data = {
       pageNum: 1,
       pageSize: 10,
       params: {
         teacherId: 1,
-        name: "",
-      },
-    };
+        name: ''
+      }
+    }
     findSubjectBT(data).then((res) => {
-      console.log(res.data.content);
-      this.options = res.data.content;
-    });
+      console.log(res.data.content)
+      this.options = res.data.content
+    })
   },
   methods: {
     // 初始化数据
     init() {
-      this.loading = false;
-      if (this.searchText != " ") {
-        this.currentPage = 1;
+      this.loading = false
+      if (this.searchText != ' ') {
+        this.currentPage = 1
       }
       this.searchParams = {
-        key: this.searchText === "" ? "" : this.searchText,
+        key: this.searchText === '' ? '' : this.searchText,
         index: this.currentPage - 1,
         length: this.pageSize,
-        typeIdList: this.filterList,
-      };
+        typeIdList: this.filterList
+      }
     },
     changesubject(val) {
-      console.log(val);
+      console.log(val)
 
       var data = {
         pageNum: 1,
         pageSize: 10,
         params: {
-          subjectId: val,
-        },
-      };
+          subjectId: val
+        }
+      }
       findStudent(data).then((res) => {
-        this.list = res.data.content;
-        this.tableData2 = new Array();
+        this.list = res.data.content
+        this.tableData2 = new Array()
         for (let i = 0; i < res.data.content.length; i++) {
           if ((this.list[i].sex = 1)) {
-            this.list[i].sex = "男";
+            this.list[i].sex = '男'
           } else {
-            this.list[i].sex = "女";
+            this.list[i].sex = '女'
           }
 
           this.tableData2[i] = {
@@ -136,59 +138,59 @@ export default {
             sex: this.list[i].sex,
             phone: this.list[i].phone,
             age: this.list[i].age,
-            birth_day: this.list[i].birthDay,
-          };
+            birth_day: this.list[i].birthDay
+          }
         }
-        this.tableData = this.tableData2;
-      });
+        this.tableData = this.tableData2
+      })
     },
 
     // 每页显示数量
     handleSizeChange(size) {
-      this.pageSize = size;
-      this.init();
+      this.pageSize = size
+      this.init()
     },
     // 控制页面切换
     handleCurrentChange(currentPage) {
-      this.currentPage = currentPage;
-      this.init();
+      this.currentPage = currentPage
+      this.init()
     },
     // 移除学生按钮
     btnView(row) {
-      console.log(row);
+      console.log(row)
       var data = {
         userId: row.id,
-        subjectId: this.value,
-      };
+        subjectId: this.value
+      }
       deleteSubjectUser(data).then((res) => {
-        console.log(res);
-      });
+        console.log(res)
+      })
     },
     // 爬取
     crawlNovel() {
       crawlNovel().then((res) => {
         if (res.code == 0) {
           this.$message({
-            message: "添加成功",
-            type: "success",
-          });
+            message: '添加成功',
+            type: 'success'
+          })
         } else {
           this.$message({
-            message: "添加失败",
-            type: "error",
-          });
+            message: '添加失败',
+            type: 'error'
+          })
         }
-      });
+      })
     },
     // 获取筛选条件
     getFilterNameItem() {
-      return this.typeList;
+      return this.typeList
     },
     // 开始筛选
     filterChange(filterObj) {
-      this.filterList = filterObj.filterTag;
-      this.init();
-    },
-  },
-};
+      this.filterList = filterObj.filterTag
+      this.init()
+    }
+  }
+}
 </script>
