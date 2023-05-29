@@ -111,6 +111,7 @@ export default {
     QuestionShow
   },
   created() {
+    this.form.userId = parseInt(localStorage.getItem("teacherId"))
     const that = this
     this.initSubject()
     const id = this.$route.query.id

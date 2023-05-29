@@ -18,10 +18,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="题干: " prop="title" required>
-        <el-input
-          v-model="form.title"
-          @focus="inputClick(form, 'title')"
-        />
+        <el-input v-model="form.title" @focus="inputClick(form, 'title')" />
       </el-form-item>
       <el-form-item label="选项: " required>
         <el-form-item
@@ -40,10 +37,7 @@
         </el-form-item>
       </el-form-item>
       <el-form-item label="解析: " prop="analyze" required>
-        <el-input
-          v-model="form.analyze"
-          @focus="inputClick(form, 'analyze')"
-        />
+        <el-input v-model="form.analyze" @focus="inputClick(form, 'analyze')" />
       </el-form-item>
       <el-form-item label="分数: " prop="score" required>
         <el-input-number
@@ -62,7 +56,8 @@
             v-for="item in form.items"
             :key="item.prefix"
             :label="item.prefix"
-          >{{ item.prefix }}</el-radio>
+            >{{ item.prefix }}</el-radio
+          >
         </el-radio-group>
       </el-form-item>
       <el-form-item>
@@ -92,15 +87,15 @@
 </template>
 
 <script>
-import Ueditor from '@/components/Ueditor'
-import QuestionShow from '../components/Show'
-import { selectById, edit } from '@/api/question'
-import { mapActions, mapState } from 'vuex'
+import Ueditor from "@/components/Ueditor";
+import QuestionShow from "../components/Show";
+import { selectById, edit } from "@/api/question";
+import { mapActions, mapState } from "vuex";
 export default {
-  name: 'TrueFalse',
+  name: "TrueFalse",
   components: {
     Ueditor,
-    QuestionShow
+    QuestionShow,
   },
   data() {
     return {
@@ -109,142 +104,143 @@ export default {
         userId: 2,
         questionType: 3,
         subjectId: null,
-        title: '',
+        title: "",
         items: [
-          { prefix: 'A', content: '是' },
-          { prefix: 'B', content: '否' }
+          { prefix: "A", content: "是" },
+          { prefix: "B", content: "否" },
         ],
-        analyze: '',
-        correct: '',
-        score: '',
-        difficult: 0
+        analyze: "",
+        correct: "",
+        score: "",
+        difficult: 0,
       },
       formLoading: false,
       rules: {
         subjectId: [
-          { required: true, message: '请选择学科', trigger: 'change' }
+          { required: true, message: "请选择学科", trigger: "change" },
         ],
-        title: [{ required: true, message: '请输入题干', trigger: 'blur' }],
-        analyze: [{ required: true, message: '请输入解析', trigger: 'blur' }],
-        score: [{ required: true, message: '请输入分数', trigger: 'blur' }],
+        title: [{ required: true, message: "请输入题干", trigger: "blur" }],
+        analyze: [{ required: true, message: "请输入解析", trigger: "blur" }],
+        score: [{ required: true, message: "请输入分数", trigger: "blur" }],
         correct: [
-          { required: true, message: '请选择正确答案', trigger: 'change' }
-        ]
+          { required: true, message: "请选择正确答案", trigger: "change" },
+        ],
       },
       richEditor: {
         dialogVisible: false,
         object: null,
-        parameterName: '',
-        instance: null
+        parameterName: "",
+        instance: null,
       },
       questionShow: {
         qType: 0,
         dialog: false,
         question: null,
-        loading: false
-      }
-    }
+        loading: false,
+      },
+    };
   },
   created() {
-    const that = this
-    this.initSubject()
-    const id = this.$route.query.id
+    this.form.userId = parseInt(localStorage.getItem("teacherId"));
+    const that = this;
+    this.initSubject();
+    const id = this.$route.query.id;
     if (id && parseInt(id) !== 0) {
-      that.formLoading = true
+      that.formLoading = true;
       selectById(id).then((res) => {
-        that.form = res.data
-        that.form.userId = 2
-        that.formLoading = false
-      })
+        that.form = res.data;
+        that.form.userId = 2;
+        that.formLoading = false;
+      });
     }
   },
   computed: {
-    ...mapState('exam', { subjectFilter: (state) => state.subjects })
+    ...mapState("exam", { subjectFilter: (state) => state.subjects }),
   },
   methods: {
     editorReady(instance) {
-      this.richEditor.instance = instance
+      this.richEditor.instance = instance;
       const currentContent =
-        this.richEditor.object[this.richEditor.parameterName]
-      this.richEditor.instance.setContent(currentContent)
+        this.richEditor.object[this.richEditor.parameterName];
+      this.richEditor.instance.setContent(currentContent);
       // 光标定位到Ueditor
-      this.richEditor.instance.focus(true)
+      this.richEditor.instance.focus(true);
     },
     inputClick(object, parameterName) {
-      this.richEditor.object = object
-      this.richEditor.parameterName = parameterName
-      this.richEditor.dialogVisible = true
+      this.richEditor.object = object;
+      this.richEditor.parameterName = parameterName;
+      this.richEditor.dialogVisible = true;
     },
     submitForm() {
-      const that = this
+      const that = this;
       this.$refs.form.validate((valid) => {
         if (valid) {
-          this.formLoading = true
+          this.formLoading = true;
           edit(this.form)
             .then((res) => {
               if (res.code == 0) {
-                that.$message.success('操作成功')
+                that.$message.success("操作成功");
                 that.delCurrentView(that).then(() => {
-                  that.$router.push('/question/list')
-                })
+                  that.$router.push("/question/list");
+                });
               } else {
-                that.$message.error('操作失败')
-                this.formLoading = false
+                that.$message.error("操作失败");
+                this.formLoading = false;
               }
             })
             .catch((e) => {
-              this.formLoading = false
-            })
+              this.formLoading = false;
+            });
         }
-      })
+      });
     },
     resetForm() {
       this.form = {
         id: null,
         questionType: 1,
         subjectId: null,
-        title: '',
+        title: "",
         items: [
-          { prefix: 'A', content: '' },
-          { prefix: 'B', content: '' },
-          { prefix: 'C', content: '' },
-          { prefix: 'D', content: '' }
+          { prefix: "A", content: "" },
+          { prefix: "B", content: "" },
+          { prefix: "C", content: "" },
+          { prefix: "D", content: "" },
         ],
-        analyze: '',
-        correct: '',
-        score: '',
-        difficult: 0
-      }
+        analyze: "",
+        correct: "",
+        score: "",
+        difficult: 0,
+      };
     },
     questionItemAdd() {
-      const items = this.form.items
-      let newLastPrefix
+      const items = this.form.items;
+      let newLastPrefix;
       if (items.length > 0) {
-        const last = items[items.length - 1]
-        newLastPrefix = String.fromCharCode(last.prefix.charCodeAt() + 1)
+        const last = items[items.length - 1];
+        newLastPrefix = String.fromCharCode(last.prefix.charCodeAt() + 1);
       } else {
-        newLastPrefix = 'A'
+        newLastPrefix = "A";
       }
-      items.push({ id: null, prefix: newLastPrefix, content: '' })
+      items.push({ id: null, prefix: newLastPrefix, content: "" });
     },
     questionItemRemove(index) {
-      this.form.items.splice(index, 1)
+      this.form.items.splice(index, 1);
     },
     showQuestion() {
-      this.questionShow.dialog = true
-      this.questionShow.qType = this.form.questionType
-      this.questionShow.question = this.form
+      this.questionShow.dialog = true;
+      this.questionShow.qType = this.form.questionType;
+      this.questionShow.question = this.form;
     },
     editorConfirm() {
-      const content = this.richEditor.instance.getContent()
-      this.richEditor.object[this.richEditor.parameterName] = content
-      this.richEditor.dialogVisible = false
-      this.richEditor.instance.setContent('')
+      const content = this.richEditor.instance.getContent();
+      this.richEditor.object[this.richEditor.parameterName] = content;
+      this.richEditor.dialogVisible = false;
+      this.richEditor.instance.setContent("");
     },
-    ...mapActions('exam', { initSubject: 'initSubject' }),
-    ...mapActions('tagsView', { delCurrentView: 'delCurrentView' })
-  }
-}
+    ...mapActions("exam", { initSubject: "initSubject" }),
+    ...mapActions("tagsView", { delCurrentView: "delCurrentView" }),
+  },
+};
 </script>
 
 <style lang="scss" scoped>

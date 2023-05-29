@@ -89,6 +89,7 @@ export default {
     };
   },
   created() {
+    this.queryParam.params.teacherId = parseInt(localStorage.getItem("teacherId"))
     this.initSubject();
     this.search();
   },

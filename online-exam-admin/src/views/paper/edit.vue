@@ -171,7 +171,7 @@ export default {
   data() {
     return {
       form: {
-        userId: 2,
+        userId: 0,
         id: null,
         subjectId: null,
         paperType: null,
@@ -220,6 +220,7 @@ export default {
     ...mapGetters("enumItem", ["enumFormat"]),
   },
   created() {
+    this.form.userId = parseInt(localStorage.getItem("teacherId"));
     const id = this.$route.query.id;
     const that = this;
     this.initSubject(function () {

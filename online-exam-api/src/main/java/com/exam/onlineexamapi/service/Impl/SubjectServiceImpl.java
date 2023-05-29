@@ -40,7 +40,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Subject findById(Integer id) {
-        return null;
+        return subjectMapper.findById(id);
     }
 
     @Override
