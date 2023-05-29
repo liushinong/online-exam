@@ -17,14 +17,30 @@
         </el-aside>
         <el-main>
             <el-header class="main-header" height="130px">
-                <div
+                <div class="item">
+                    <p class="count">{{ info.subjectNum }}</p>
+                    <p class="title">课程总数</p>
+                </div>
+                <div class="item">
+                    <p class="count">{{ info.paperNum }}</p>
+                    <p class="title">试卷总数</p>
+                </div>
+                <div class="item">
+                    <p class="count">{{ info.finishPaperNum }}</p>
+                    <p class="title">试卷完成</p>
+                </div>
+                <div class="item">
+                    <p class="count">{{ info.wrongQuestionNum }}</p>
+                    <p class="title">错题总数</p>
+                </div>
+                <!-- <div
                     v-for="(item, index) in dataList"
                     :key="index"
                     class="item"
                 >
                     <p class="count">{{ item.count }}</p>
                     <p class="title">{{ item.title }}</p>
-                </div>
+                </div> -->
             </el-header>
             <el-main class="main-content">
                 <el-menu
@@ -101,6 +117,7 @@
 <script>
 import { Message } from 'element-ui'
 import Cookies from 'js-cookie'
+import { getInfo } from '@/api/home'
 export default {
     data() {
         return {
@@ -157,11 +174,15 @@ export default {
             subjectCode: '',
             username: '',
             userId: '',
+            info: {},
         }
     },
     created() {
         this.username = localStorage.getItem('username')
         this.userId = localStorage.getItem('userId')
+        getInfo(this.userId).then((res) => {
+            this.info = res.data.data.data
+        })
     },
     methods: {
         joinSubject() {

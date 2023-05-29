@@ -7,10 +7,7 @@ import com.exam.onlineexamapi.page.PageRequest;
 import com.exam.onlineexamapi.result.RestResult;
 import com.exam.onlineexamapi.result.RestResultBuilder;
 import com.exam.onlineexamapi.service.SubjectService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -36,7 +33,7 @@ public class SubjectController {
     }
 
     @PostMapping("/delete")
-    public RestResult delete(@RequestBody Integer id) {
+    public RestResult delete(@RequestParam Integer id) {
         Subject subject = subjectService.findById(id);
         return new RestResultBuilder<>().success(subjectService.delete(subject));
     }

@@ -48,6 +48,7 @@ public class UserServiceImpl implements UserService {
                 finishPaperNum(userMapper.finishPaperNum(studentId)).
                 wrongQuestionNum(userMapper.wrongQuestionNum(studentId)).build();
         return new RestResultBuilder<>().success(informationVo);
+
     }
 
     @Override
@@ -63,6 +64,7 @@ public class UserServiceImpl implements UserService {
         }
 
         return pageResult;
+
     }
 
     @Override

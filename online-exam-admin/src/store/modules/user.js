@@ -36,6 +36,7 @@ const actions = {
       login({ username: username.trim(), password: password, grant_type: 'password', client_id: 'client', client_secret: '123456' }).then(response => {
         const { data } = response
         console.log(data)
+        localStorage.setItem("teacherId", data.userId)
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()

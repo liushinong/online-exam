@@ -5,53 +5,41 @@
     <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
     <el-row style="background: #fff; padding: 16px 16px 0; margin-bottom: 32px">
-      <line-chart />
+      <line-chart :chartData="lineChartData" />
     </el-row>
   </div>
 </template>
 
 <script>
-import GithubCorner from '@/components/GithubCorner'
-import PanelGroup from './components/PanelGroup'
-import LineChart from './components/LineChart'
-import RaddarChart from './components/RaddarChart'
-import PieChart from './components/PieChart'
-import BarChart from './components/BarChart'
-import TransactionTable from './components/TransactionTable'
-import TodoList from './components/TodoList'
-import BoxCard from './components/BoxCard'
+import GithubCorner from "@/components/GithubCorner";
+import PanelGroup from "./components/PanelGroup";
+import LineChart from "./components/LineChart";
 
 const lineChartData = {
   newVisitis: {
     expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
-  }
-}
+    actualData: [120, 82, 91, 154, 162, 140, 145],
+  },
+};
 
 export default {
-  name: 'DashboardAdmin',
+  name: "DashboardAdmin",
   components: {
     GithubCorner,
     PanelGroup,
     LineChart,
-    RaddarChart,
-    PieChart,
-    BarChart,
-    TransactionTable,
-    TodoList,
-    BoxCard
   },
   data() {
     return {
-      lineChartData: lineChartData.newVisitis
-    }
+      lineChartData: lineChartData.newVisitis,
+    };
   },
   methods: {
     handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type]
-    }
-  }
-}
+      this.lineChartData = lineChartData[type];
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

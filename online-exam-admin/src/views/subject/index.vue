@@ -1,7 +1,8 @@
-
 <template>
   <el-card>
-    <el-button type="primary" @click="btnView()">添加班级</el-button>
+    <el-button type="primary" @click="btnView()" style="margin-bottom: 20px"
+      >添加班级</el-button
+    >
     <el-table
       v-loading="loading"
       :data="tableData"
@@ -9,22 +10,18 @@
       stripe
       @filter-change="filterChange"
     >
-      <el-table-column prop="id" label="id" align="center" />
+      <el-table-column prop="id" label="id" align="center" width="80px" />
       <el-table-column prop="name" label="班级名称" align="center" />
       <el-table-column prop="subjectCode" label="班级口令" align="center" />
       <el-table-column prop="createTime" label="创建时间" align="center" />
       <el-table-column fixed="right" label="操作" width="150" align="center">
         <template slot-scope="scope">
-          <el-button
-            size="small"
-            type="primary"
-            @click="btnView(scope.row)"
-          >查看</el-button>
-          <el-button
-            type="danger"
-            size="small"
-            @click="deleteS(scope.row)"
-          >删除</el-button>
+          <el-button size="small" type="primary" @click="btnView(scope.row)"
+            >编辑</el-button
+          >
+          <el-button type="danger" size="small" @click="deleteS(scope.row)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -54,17 +51,18 @@
 </template>
 
 <script>
-import { findSubjectBT } from '@/api/student'
-import { timeFormat } from '@/utils/util'
-import { deleteSubject, addSubject } from '@/api/subject'
-import { pageList } from '@/api/question'
-import Pagination from '@/components/Pagination'
+import { findSubjectBT } from "@/api/student";
+import { timeFormat } from "@/utils/util";
+import { deleteSubject, addSubject } from "@/api/subject";
+import { pageList } from "@/api/question";
+import Pagination from "@/components/Pagination";
 export default {
   components: {
-    Pagination
+    Pagination,
   },
   data() {
     return {
+      teacherId: 0,
       list: [],
       searchParams: {},
       loading: false,
@@ -73,95 +71,94 @@ export default {
       pageNum: 1,
       pageSize: 10,
       total: 0,
-      searchText: '',
-      l: '',
+      searchText: "",
+      l: "",
       options: [],
-      value: '',
+      value: "",
       IsShow: false,
-      input: '',
+      input: "",
       dataN: {
-        name: ''
-      }
-    }
+        name: "",
+      },
+    };
   },
   created() {
-    this.search()
+    this.teacherId = parseInt(localStorage.getItem("teacherId"));
+    this.search();
   },
   methods: {
-    deleteS(id) {
-      var subjectId = id.id
-      deleteSubject(this.subjectId).then((res) => {
-        console.log(res)
-      })
+    deleteS(row) {
+      deleteSubject(row.id).then((res) => {
+        console.log(res);
+      });
     },
-    btnView(id) {
-      if (id == undefined) {
-        this.dataN = {}
+    btnView(row) {
+      if (row == undefined) {
+        this.dataN = {};
         this.dataN.img =
-          'https://xuekaikai.oss-cn-shanghai.aliyuncs.com/campus_navigatic/1.png'
-        this.dataN.teacherId = 2
+          "https://xuekaikai.oss-cn-shanghai.aliyuncs.com/campus_navigatic/1.png";
+        this.dataN.teacherId = this.teacherId;
       } else {
-        this.dataN = {}
-        this.dataN.id = id.id
+        this.dataN.name = row.name;
+        this.dataN.id = row.id;
         this.dataN.img =
-          'https://xuekaikai.oss-cn-shanghai.aliyuncs.com/campus_navigatic/1.png'
+          "https://xuekaikai.oss-cn-shanghai.aliyuncs.com/campus_navigatic/1.png";
       }
-
-      this.IsShow = true
+      this.IsShow = true;
     },
     onSubmit() {
-      var data = this.dataN
+      var data = this.dataN;
       addSubject(data).then((res) => {
-        console.log(res)
-        this.search()
-      })
-      this.IsShow = false
+        console.log(res);
+        this.search();
+      });
+      this.IsShow = false;
     },
 
     search() {
-      this.loading = true
+      this.loading = true;
       var data = {
         pageNum: this.pageNum,
         pageSize: this.pageSize,
         params: {
-          teacherId: 2,
-          name: ''
-        }
-      }
+          teacherId: this.teacherId,
+          name: "",
+        },
+      };
       findSubjectBT(data).then((res) => {
-        this.total = res.data.totalSize
-        this.pageNum = res.data.pageNum
-        this.options = res.data.content
-        this.tableData = res.data.content
+        this.total = res.data.totalSize;
+        this.pageNum = res.data.pageNum;
+        this.options = res.data.content;
+        this.tableData = res.data.content;
         for (let i = 0; i < this.tableData.length; i++) {
           this.tableData[i].createTime = timeFormat(
             this.tableData[i].createTime
-          )
+          );
         }
-        this.loading = false
-      })
+        this.loading = false;
+      });
     },
 
     // 每页显示数量
     handleSizeChange(size) {
-      this.pageSize = size
-      this.init()
+      this.pageSize = size;
+      this.init();
     },
     // 控制页面切换
     handleCurrentChange(currentPage) {
-      this.currentPage = currentPage
-      this.init()
+      this.currentPage = currentPage;
+      this.init();
     },
 
     // 获取筛选条件
     getFilterNameItem() {
-      return this.typeList
+      return this.typeList;
     },
     // 开始筛选
     filterChange(filterObj) {
-      this.filterList = filterObj.filterTag
-      this.init()
-    }
-  }
-}
+      this.filterList = filterObj.filterTag;
+      this.init();
+    },
+  },
+};
 </script>

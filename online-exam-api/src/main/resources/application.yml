@@ -1,9 +1,11 @@
 server:
   port: 8888
 spring:
+  jackson:
+    time-zone: GMT+8
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://121.37.132.254:3306/online-exam?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC&allowMultiQueries=true
+    url: jdbc:mysql://121.37.132.254:3306/online-exam?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&allowMultiQueries=true
     username: root
     password: Root@123
 #    password: 107107

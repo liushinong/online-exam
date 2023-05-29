@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +21,7 @@ public class ExamPaper {
   private Integer score;
   private Integer questionCount;
   private Integer suggestTime;
-  private java.sql.Timestamp limitStartTime;
+  private Timestamp limitStartTime;
   private java.sql.Timestamp limitEndTime;
   private Integer frameTextContentId;
   private Integer createUser;

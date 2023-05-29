@@ -145,7 +145,7 @@ public class ExamPaperServiceImpl implements ExamPaperService {
         examPaper.setQuestionCount(questionCount);
         examPaper.setScore(score);
         List<String> dateTimes = examPaperEditRequestDTO.getLimitDateTime();
-        if (ExamPaperTypeEnum.TimeLimit == ExamPaperTypeEnum.fromCode((int) examPaper.getPaperType())) {
+        if (ExamPaperTypeEnum.TimeLimit == ExamPaperTypeEnum.fromCode(examPaper.getPaperType())) {
             examPaper.setLimitStartTime(new Timestamp((DateTimeUtil.parse(dateTimes.get(0), DateTimeUtil.STANDER_FORMAT)).getTime()));
             examPaper.setLimitEndTime(new Timestamp((DateTimeUtil.parse(dateTimes.get(1), DateTimeUtil.STANDER_FORMAT)).getTime()));
         }

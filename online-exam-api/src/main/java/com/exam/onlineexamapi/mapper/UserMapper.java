@@ -40,5 +40,4 @@ public interface UserMapper {
 
     Integer wrongQuestionNum(Integer studentId);
 
-
 }

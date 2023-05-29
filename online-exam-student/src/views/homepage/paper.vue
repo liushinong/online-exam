@@ -59,7 +59,7 @@
                         结束时间:
                         {{
                             item.paperType == 2
-                                ? item.limitStartTime.split('T')[0] +
+                                ? item.limitEndTime.split('T')[0] +
                                   ' ' +
                                   item.limitStartTime
                                       .split('T')[1]
@@ -67,7 +67,12 @@
                                 : '-------'
                         }}
                     </p>
-                    <div class="bottom">
+                    <div class="bottom" v-if="judge(item)">
+                        <el-button type="text" style="float: right; color: red"
+                            >暂未开始</el-button
+                        >
+                    </div>
+                    <div class="bottom" v-else>
                         <router-link
                             target="_blank"
                             :to="{ path: '/do', query: { id: item.id } }"
@@ -130,6 +135,20 @@ export default {
         }
     },
     methods: {
+        judge(item) {
+            if (item.paperType != 2) {
+                return false
+            } else {
+                let startTime = new Date(item.limitStartTime)
+                let endTime = new Date(item.limitEndTime)
+                let time = new Date()
+                if (time.getTime() < startTime || time.getTime() > endTime) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        },
         initSubject() {
             let that = this
             list(localStorage.getItem('userId')).then((res) => {
