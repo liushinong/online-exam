@@ -1,12 +1,10 @@
 package com.exam.onlineexamapi.controller.student;
 
+import com.exam.onlineexamapi.domain.dto.student.subject.JoinSubjectDTO;
 import com.exam.onlineexamapi.result.RestResult;
 import com.exam.onlineexamapi.result.RestResultBuilder;
 import com.exam.onlineexamapi.service.SubjectService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -25,5 +23,10 @@ public class EducationController {
     @PostMapping("/subject/select")
     public RestResult select(@RequestParam Integer id) {
         return null;
+    }
+
+    @PostMapping("/subject/join")
+    public RestResult joinSubject(@RequestBody JoinSubjectDTO joinSubjectDTO){
+        return  subjectService.joinSubject(joinSubjectDTO);
     }
 }

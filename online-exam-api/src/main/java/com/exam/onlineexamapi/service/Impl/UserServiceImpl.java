@@ -48,6 +48,23 @@ public class UserServiceImpl implements UserService {
                 finishPaperNum(userMapper.finishPaperNum(studentId)).
                 wrongQuestionNum(userMapper.wrongQuestionNum(studentId)).build();
         return new RestResultBuilder<>().success(informationVo);
+
+    }
+
+    @Override
+    public PageResult findSubjectByPage(PageRequest pageRequest) {
+        PageResult pageResult = null;
+        Object studentId = pageRequest.getParam("studentId");
+        Object search = pageRequest.getParam("search");
+
+        if (search != null) {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, userMapper, "fuzzyQuery", studentId, search);
+        } else {
+            pageResult = MybatisPageHelper.findByPage(pageRequest, userMapper, "findSubjectByPage", studentId);
+        }
+
+        return pageResult;
+
     }
 
     @Override
