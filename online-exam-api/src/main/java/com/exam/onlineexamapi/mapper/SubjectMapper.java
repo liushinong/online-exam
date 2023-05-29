@@ -5,6 +5,7 @@ import com.exam.onlineexamapi.domain.entity.Subject;
 import com.exam.onlineexamapi.domain.vo.student.SubjectVO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Mapper
@@ -18,6 +19,6 @@ public interface SubjectMapper {
     List<SubjectVO> getSubjectByStuId(Integer id);
     Integer deleteSubjectUser(Integer subjectId,Integer userId);
     Integer selectByCode(String subjectCode);
-    Integer joinSubject(Integer userId,Integer subjectId);
+    Integer joinSubject(Integer userId, Integer subjectId, Timestamp createTime);
     Integer judgment(Integer userId,Integer subjectId);
 }

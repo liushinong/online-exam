@@ -9,3 +9,19 @@ export function getInfo (id) {
         }
     })
 }
+
+export function pageList (data) {
+    return request({
+        url: '/user/selectStudentSubject',
+        method: 'post',
+        data
+    })
+}
+
+export function joinSubject (data) {
+    return request({
+        url: '/student/education/subject/join',
+        method: 'post',
+        data
+    })
+}

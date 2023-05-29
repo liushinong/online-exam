@@ -66,7 +66,12 @@
         <el-button type="success" @click="showQuestion">预览</el-button>
       </el-form-item>
     </el-form>
-    <el-dialog :visible.sync="richEditor.dialogVisible">
+    <el-dialog
+      :visible.sync="richEditor.dialogVisible"
+      append-to-body
+      :close-on-click-modal="false"
+      :show-close="false"
+    >
       <Ueditor @ready="editorReady" />
       <span slot="footer">
         <el-button type="primary" @click="editorConfirm">确定</el-button>
@@ -235,7 +240,7 @@ export default {
       const content = this.richEditor.instance.getContent();
       this.richEditor.object[this.richEditor.parameterName] = content;
       this.richEditor.dialogVisible = false;
-      this.richEditor.instance.setContent("");
+      // this.richEditor.instance.setContent("");
     },
     ...mapActions("exam", { initSubject: "initSubject" }),
     ...mapActions("tagsView", { delCurrentView: "delCurrentView" }),
