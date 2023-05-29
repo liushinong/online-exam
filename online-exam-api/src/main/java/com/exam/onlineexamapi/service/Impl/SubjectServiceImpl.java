@@ -2,12 +2,15 @@ package com.exam.onlineexamapi.service.Impl;
 
 import com.exam.onlineexamapi.domain.dto.admin.question.SubjectEditDTO;
 import com.exam.onlineexamapi.domain.dto.admin.subject.SubjectUserDTO;
+import com.exam.onlineexamapi.domain.dto.student.subject.JoinSubjectDTO;
 import com.exam.onlineexamapi.domain.entity.Subject;
 import com.exam.onlineexamapi.domain.vo.student.SubjectVO;
 import com.exam.onlineexamapi.mapper.SubjectMapper;
 import com.exam.onlineexamapi.page.MybatisPageHelper;
 import com.exam.onlineexamapi.page.PageRequest;
 import com.exam.onlineexamapi.page.PageResult;
+import com.exam.onlineexamapi.result.RestResult;
+import com.exam.onlineexamapi.result.RestResultBuilder;
 import com.exam.onlineexamapi.service.SubjectService;
 import org.springframework.stereotype.Service;
 
@@ -85,5 +88,24 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Integer deleteSubjectUser(SubjectUserDTO subjectUserDTO) {
         return subjectMapper.deleteSubjectUser(subjectUserDTO.getSubjectId(),subjectUserDTO.getUserId());
+    }
+
+    @Override
+    public RestResult<Object> joinSubject(JoinSubjectDTO joinSubjectDTO) {
+
+        Integer subjectId=subjectMapper.selectByCode(joinSubjectDTO.getSubjectCode());
+        if(subjectId!=null){
+            Integer flag=subjectMapper.judgment(joinSubjectDTO.getUserId(),subjectId);
+            if(flag==0){
+                Integer join=subjectMapper.joinSubject(joinSubjectDTO.getUserId(),subjectId);
+                return new RestResultBuilder<>().success(join);
+            }
+            else {
+                return new RestResultBuilder<>().error("已加入该课程");
+            }
+        }
+        else{
+            return new RestResultBuilder<>().error("课程不存在");
+        }
     }
 }

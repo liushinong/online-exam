@@ -17,4 +17,7 @@ public interface SubjectMapper {
     Integer delete(Integer id);
     List<SubjectVO> getSubjectByStuId(Integer id);
     Integer deleteSubjectUser(Integer subjectId,Integer userId);
+    Integer selectByCode(String subjectCode);
+    Integer joinSubject(Integer userId,Integer subjectId);
+    Integer judgment(Integer userId,Integer subjectId);
 }
