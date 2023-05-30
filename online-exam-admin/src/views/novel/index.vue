@@ -18,15 +18,21 @@
       </el-select>
     </div>
 
-    <el-table v-loading="loading" :data="tableData" border height="550" stripe>
+    <el-table
+      v-loading="loading"
+      :data="tableData"
+      border
+      fit
+      highlight-current-row
+    >
       <el-table-column prop="id" label="学生id" align="center" />
       <el-table-column prop="user_uuid" label="用户名" align="center" />
-      <el-table-column prop="real_name" label="真实姓名" align="center" />
-      <el-table-column prop="level" label="年级" align="center" />
+      <!-- <el-table-column prop="real_name" label="真实姓名" align="center" /> -->
+      <!-- <el-table-column prop="level" label="年级" align="center" /> -->
       <el-table-column prop="sex" label="性别" width="100" align="center" />
       <el-table-column prop="phone" label="手机号" align="center" />
       <el-table-column prop="age" label="年龄" align="center" />
-      <el-table-column prop="birth_day" label="生日" align="center" />
+      <el-table-column prop="create_time" label="创建时间" align="center" />
 
       <el-table-column fixed="right" label="操作" width="150" align="center">
         <template slot-scope="scope">
@@ -37,6 +43,8 @@
       </el-table-column>
     </el-table>
     <el-pagination
+      style="margin-top: 20px"
+      v-show="total > 0"
       background
       layout="prev, pager, next, sizes"
       :total="total"
@@ -67,7 +75,7 @@ export default {
       searchText: "",
       l: "",
       options: [],
-      value: "",
+      value: null,
     };
   },
   created() {
@@ -82,7 +90,10 @@ export default {
     };
     findSubjectBT(data).then((res) => {
       this.options = res.data.content;
-      this.value = this.options[0].id;
+      if (this.options.length > 0) {
+        this.value = this.options[0].id;
+      }
+
       this.init();
     });
   },
@@ -113,7 +124,10 @@ export default {
             sex: this.list[i].sex,
             phone: this.list[i].phone,
             age: this.list[i].age,
-            birth_day: this.list[i].birthDay,
+            create_time:
+              this.list[i].createTime.split("T")[0] +
+              " " +
+              this.list[i].createTime.split("T")[1].split(".")[0],
           };
         }
         this.tableData = this.tableData2;
@@ -147,7 +161,10 @@ export default {
             sex: this.list[i].sex,
             phone: this.list[i].phone,
             age: this.list[i].age,
-            birth_day: this.list[i].birthDay,
+            create_time:
+              this.list[i].createTime.split("T")[0] +
+              " " +
+              this.list[i].createTime.split("T")[1].split(".")[0],
           };
         }
         this.tableData = this.tableData2;

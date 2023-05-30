@@ -132,7 +132,7 @@ export const constantRoutes = [
     name: 'Paper',
     meta: {
       title: '试卷管理',
-      icon: 'el-icon-s-order'
+      icon: 'el-icon-document-add'
     },
     children: [
       {
@@ -161,7 +161,7 @@ export const constantRoutes = [
     name: 'Question',
     meta: {
       title: '题库管理',
-      icon: 'el-icon-s-order'
+      icon: 'el-icon-notebook-1'
     },
     children: [
       {
@@ -236,7 +236,7 @@ export const constantRoutes = [
     name: 'Answer',
     meta: {
       title: '答卷管理',
-      icon: 'el-icon-s-order'
+      icon: 'el-icon-money'
     },
     children: [
       {
