@@ -30,13 +30,13 @@ const mutations = {
 
 const actions = {
   // user login
-  login ({ commit }, userInfo) {
+  login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password, grant_type: 'password', client_id: 'client', client_secret: '123456' }).then(response => {
         const { data } = response
         console.log(data)
-        localStorage.setItem("teacherId", data.userId)
+        localStorage.setItem('teacherId', data.userId)
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()
@@ -47,7 +47,7 @@ const actions = {
   },
 
   // get user info
-  getInfo ({ commit, state }) {
+  getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo().then(response => {
         const { data } = response
@@ -75,7 +75,7 @@ const actions = {
   },
 
   // user logout
-  logout ({ commit, state, dispatch }) {
+  logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       // logout(state.token).then(() => {
       commit('SET_TOKEN', '')
@@ -95,7 +95,7 @@ const actions = {
   },
 
   // remove token
-  resetToken ({ commit }) {
+  resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
@@ -105,7 +105,7 @@ const actions = {
   },
 
   // dynamically modify permissions
-  async changeRoles ({ commit, dispatch }, role) {
+  async changeRoles({ commit, dispatch }, role) {
     const token = role + '-token'
 
     commit('SET_TOKEN', token)

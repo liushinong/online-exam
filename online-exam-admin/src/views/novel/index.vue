@@ -30,9 +30,11 @@
 
       <el-table-column fixed="right" label="操作" width="150" align="center">
         <template slot-scope="scope">
-          <el-button size="small" type="primary" @click="btnView(scope.row)"
-            >移除该学生</el-button
-          >
+          <el-button
+            size="small"
+            type="primary"
+            @click="btnView(scope.row)"
+          >移除该学生</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -50,9 +52,9 @@
 </template>
 
 <script>
-import { findStudent } from "@/api/student";
-import { findSubjectBT } from "@/api/student";
-import { deleteSubjectUser } from "@/api/subject";
+import { findStudent } from '@/api/student'
+import { findSubjectBT } from '@/api/student'
+import { deleteSubjectUser } from '@/api/subject'
 
 export default {
   data() {
@@ -64,27 +66,27 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 50,
-      searchText: "",
-      l: "",
+      searchText: '',
+      l: '',
       options: [],
-      value: "",
-    };
+      value: ''
+    }
   },
   created() {
-    this.loading = true;
+    this.loading = true
     var data = {
       pageNum: 1,
       pageSize: 10,
       params: {
         teacherId: 1,
-        name: "",
-      },
-    };
+        name: ''
+      }
+    }
     findSubjectBT(data).then((res) => {
-      this.options = res.data.content;
-      this.value = this.options[0].id;
-      this.init();
-    });
+      this.options = res.data.content
+      this.value = this.options[0].id
+      this.init()
+    })
   },
   methods: {
     init() {
@@ -92,17 +94,17 @@ export default {
         pageNum: 1,
         pageSize: 10,
         params: {
-          subjectId: this.value,
-        },
-      };
+          subjectId: this.value
+        }
+      }
       findStudent(data).then((res) => {
-        this.list = res.data.content;
-        this.tableData2 = new Array();
+        this.list = res.data.content
+        this.tableData2 = new Array()
         for (let i = 0; i < res.data.content.length; i++) {
           if ((this.list[i].sex = 1)) {
-            this.list[i].sex = "男";
+            this.list[i].sex = '男'
           } else {
-            this.list[i].sex = "女";
+            this.list[i].sex = '女'
           }
 
           this.tableData2[i] = {
@@ -113,12 +115,12 @@ export default {
             sex: this.list[i].sex,
             phone: this.list[i].phone,
             age: this.list[i].age,
-            birth_day: this.list[i].birthDay,
-          };
+            birth_day: this.list[i].birthDay
+          }
         }
-        this.tableData = this.tableData2;
-        this.loading = false;
-      });
+        this.tableData = this.tableData2
+        this.loading = false
+      })
     },
 
     changeSubject(val) {
@@ -126,17 +128,17 @@ export default {
         pageNum: 1,
         pageSize: 10,
         params: {
-          subjectId: val,
-        },
-      };
+          subjectId: val
+        }
+      }
       findStudent(data).then((res) => {
-        this.list = res.data.content;
-        this.tableData2 = new Array();
+        this.list = res.data.content
+        this.tableData2 = new Array()
         for (let i = 0; i < res.data.content.length; i++) {
           if ((this.list[i].sex = 1)) {
-            this.list[i].sex = "男";
+            this.list[i].sex = '男'
           } else {
-            this.list[i].sex = "女";
+            this.list[i].sex = '女'
           }
 
           this.tableData2[i] = {
@@ -147,34 +149,34 @@ export default {
             sex: this.list[i].sex,
             phone: this.list[i].phone,
             age: this.list[i].age,
-            birth_day: this.list[i].birthDay,
-          };
+            birth_day: this.list[i].birthDay
+          }
         }
-        this.tableData = this.tableData2;
-      });
+        this.tableData = this.tableData2
+      })
     },
 
     // 每页显示数量
     handleSizeChange(size) {
-      this.pageSize = size;
-      this.init();
+      this.pageSize = size
+      this.init()
     },
     // 控制页面切换
     handleCurrentChange(currentPage) {
-      this.currentPage = currentPage;
-      this.init();
+      this.currentPage = currentPage
+      this.init()
     },
     // 移除学生按钮
     btnView(row) {
-      console.log(row);
+      console.log(row)
       var data = {
         userId: row.id,
-        subjectId: this.value,
-      };
+        subjectId: this.value
+      }
       deleteSubjectUser(data).then((res) => {
         // console.log(res);
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
