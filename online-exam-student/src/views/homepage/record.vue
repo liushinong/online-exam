@@ -56,7 +56,7 @@
                         <p>正确题数: {{ item.questionCorrect }}</p>
                         <p>自动批改: {{ item.systemScore }}</p>
                         <p>最终得分: {{ item.userScore }}</p>
-                        <p>耗时: {{ item.doTime }}分钟</p>
+                        <p>耗时: {{ item.doTime }}秒</p>
                     </div>
                 </div>
                 <router-link

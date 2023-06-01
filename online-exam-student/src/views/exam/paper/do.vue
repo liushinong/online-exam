@@ -118,7 +118,7 @@ export default {
                         that.$alert('提交成功', {
                             confirmButtonText: '返回考试记录',
                             callback: (action) => {
-                                that.$router.push('/record/index')
+                                that.$router.push('/record')
                             },
                         })
                     } else {
