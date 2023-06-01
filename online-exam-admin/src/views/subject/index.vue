@@ -95,8 +95,13 @@ export default {
   methods: {
     deleteS(row) {
       deleteSubject(row.id).then((res) => {
-        console.log(res)
-      })
+        if (res.code == 0) {
+          this.$message.success('删除成功')
+          this.search()
+        } else {
+          this.$message.error('删除失败')
+        }
+      });
     },
     btnView(row) {
       if (row == undefined) {

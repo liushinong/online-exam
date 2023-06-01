@@ -109,7 +109,7 @@ export default {
     return {
       queryParam: {
         params: {
-          teacherId: 2,
+          teacherId: 0,
         },
         pageNum: 1,
         pageSize: 10,
@@ -126,6 +126,9 @@ export default {
     };
   },
   created() {
+    this.queryParam.params.teacherId = parseInt(
+      localStorage.getItem("teacherId")
+    );
     this.initSubject();
     this.search();
   },

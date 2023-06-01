@@ -24,6 +24,7 @@ export default {
   },
   watch: {
     value: function (val, oldVal) {
+      console.log(2222);
       if (val != null && this.ready) {
         // eslint-disable-next-line no-undef
         this.instance = UE.getEditor(this.randomId);
@@ -36,6 +37,7 @@ export default {
   },
 
   beforeDestroy() {
+    console.log(3333);
     if (this.instance !== null && this.instance.destroy) {
       this.instance.destroy();
     }
@@ -56,7 +58,7 @@ export default {
     },
     setText(con) {
       // eslint-disable-next-line no-undef
-      this.instance = getEditor(this.randomId);
+      this.instance = UE.getEditor(this.randomId);
       this.instance.setContent(con);
     },
   },

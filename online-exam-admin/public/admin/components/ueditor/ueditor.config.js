@@ -30,7 +30,7 @@
   }
   (window.UEDITOR_CONFIG = {
     UEDITOR_HOME_URL: s,
-    serverUrl: "/api/admin/upload/configAndUpload",
+    serverUrl: "/admin/upload/configAndUpload",
     toolbars: [
       [
         "fullscreen",

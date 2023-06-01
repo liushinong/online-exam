@@ -15,7 +15,7 @@
                 >退出登录</el-button
             >
         </el-aside>
-        <el-main>
+        <el-main v-loading="listLoading">
             <el-header class="main-header" height="130px">
                 <div class="item">
                     <p class="count">{{ info.subjectNum }}</p>
@@ -33,14 +33,6 @@
                     <p class="count">{{ info.wrongQuestionNum }}</p>
                     <p class="title">错题总数</p>
                 </div>
-                <!-- <div
-                    v-for="(item, index) in dataList"
-                    :key="index"
-                    class="item"
-                >
-                    <p class="count">{{ item.count }}</p>
-                    <p class="title">{{ item.title }}</p>
-                </div> -->
             </el-header>
             <el-main class="main-content">
                 <el-menu
@@ -62,8 +54,10 @@
                         prefix-icon="el-icon-search"
                         placeholder="请输入课程名称"
                         style="width: 240px; margin-right: 14px"
+                        v-model="queryParam.params.search"
+                        clearable
                     ></el-input>
-                    <el-button type="warning">搜索</el-button>
+                    <el-button type="warning" @click="search">搜索</el-button>
                 </div>
                 <div
                     class="subject-item"
@@ -78,11 +72,14 @@
                             />
                         </div>
                         <div class="item-content">
-                            <h3>{{ item.title }}</h3>
+                            <h3>{{ item.name }}</h3>
                             <div class="item-detail">
-                                <p>创建时间: {{ item.createTime }}</p>
-                                <p>主持人: {{ item.teacher }}</p>
-                                <p>学生数: {{ item.stuCount }}</p>
+                                <p>
+                                    创建时间:
+                                    {{ timeFormatter(item.createTime) }}
+                                </p>
+                                <!-- <p>主持人: {{ item.teacherId }}</p> -->
+                                <p>课程码: {{ item.subjectCode }}</p>
                             </div>
                         </div>
                     </div>
@@ -92,24 +89,34 @@
                         @click="
                             $router.push({
                                 path: '/paper',
-                                query: { id: item.subjectId },
+                                query: { id: item.id },
                             })
                         "
                         >进入</el-button
                     >
                 </div>
+                <pagination
+                    v-show="total > 0"
+                    :total="total"
+                    :background="false"
+                    :page.sync="queryParam.pageNum"
+                    :limit.sync="queryParam.pageSize"
+                    @pagination="search"
+                    style="margin-top: 20px"
+                />
             </el-main>
         </el-main>
         <el-dialog :visible.sync="dialogVisible" title="加入班级" width="600px">
             <span>课程码: </span>
             <el-input
+                maxlength="6"
                 placeholder="请输入课程码"
                 v-model="subjectCode"
                 style="width: 260px; margin-left: 20px"
             ></el-input>
             <div slot="footer">
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="joinSubject">确定</el-button>
+                <el-button type="primary" @click="join">确定</el-button>
             </div>
         </el-dialog>
     </el-container>
@@ -117,8 +124,13 @@
 <script>
 import { Message } from 'element-ui'
 import Cookies from 'js-cookie'
-import { getInfo } from '@/api/home'
+import { getInfo, pageList, joinSubject } from '@/api/home'
+import Pagination from '@/components/Pagination'
+import { timeFormat } from '@/utils'
 export default {
+    components: {
+        Pagination,
+    },
     data() {
         return {
             dataList: [
@@ -144,52 +156,59 @@ export default {
                 },
             ],
             defaultActive: '1',
-            subjectList: [
-                {
-                    subjectId: 1,
-                    img: 'https://xuekaikai.oss-cn-shanghai.aliyuncs.com/campus_navigatic/1.png',
-                    title: 'Web前端框架',
-                    createTime: '2023-02-12',
-                    teacher: 'xxx',
-                    stuCount: 33,
-                },
-                {
-                    subjectId: 2,
-                    img: 'https://xuekaikai.oss-cn-shanghai.aliyuncs.com/campus_navigatic/1.png',
-                    title: 'Web前端框架',
-                    createTime: '2023-02-12',
-                    teacher: 'xxx',
-                    stuCount: 33,
-                },
-                {
-                    subjectId: 3,
-                    img: 'https://xuekaikai.oss-cn-shanghai.aliyuncs.com/campus_navigatic/1.png',
-                    title: 'Web前端框架',
-                    createTime: '2023-02-12',
-                    teacher: 'xxx',
-                    stuCount: 33,
-                },
-            ],
+            subjectList: [],
             dialogVisible: false,
             subjectCode: '',
             username: '',
             userId: '',
             info: {},
+            queryParam: {
+                pageNum: 1,
+                pageSize: 3,
+                params: {
+                    search: '',
+                    studentId: -1,
+                },
+            },
+            total: 0,
+            listLoading: false,
         }
     },
     created() {
         this.username = localStorage.getItem('username')
         this.userId = localStorage.getItem('userId')
+        this.queryParam.params.studentId = parseInt(
+            localStorage.getItem('userId'),
+        )
         getInfo(this.userId).then((res) => {
             this.info = res.data.data.data
         })
+        this.search()
     },
     methods: {
-        joinSubject() {
+        search() {
+            this.listLoading = true
+            pageList(this.queryParam).then((res) => {
+                console.log(res.data.data)
+                this.subjectList = res.data.data.content
+                this.total = res.data.data.totalSize
+                this.queryParam.pageNum = res.data.data.pageNum
+                this.listLoading = false
+            })
+        },
+        join() {
             this.dialogVisible = false
-            Message({
-                message: '加入班级成功',
-                type: 'success',
+            let data = {
+                userId: this.userId,
+                subjectCode: this.subjectCode,
+            }
+            joinSubject(data).then((res) => {
+                if (res.data.code != 0) {
+                    this.$message.error(res.data.msg)
+                } else {
+                    this.$message.success('加入课程成功')
+                    this.search()
+                }
             })
         },
         logout() {
@@ -197,6 +216,9 @@ export default {
                 localStorage.removeItem('username')
             Cookies.remove('token')
             this.$router.push({ path: '/login' })
+        },
+        timeFormatter(time) {
+            return timeFormat(time)
         },
     },
 }

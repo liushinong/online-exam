@@ -43,7 +43,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Subject findById(Integer id) {
-        return null;
+        return subjectMapper.findById(id);
     }
 
     @Override
@@ -87,24 +87,23 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Integer deleteSubjectUser(SubjectUserDTO subjectUserDTO) {
-        return subjectMapper.deleteSubjectUser(subjectUserDTO.getSubjectId(),subjectUserDTO.getUserId());
+        return subjectMapper.deleteSubjectUser(subjectUserDTO.getSubjectId(), subjectUserDTO.getUserId());
     }
 
     @Override
     public RestResult<Object> joinSubject(JoinSubjectDTO joinSubjectDTO) {
 
-        Integer subjectId=subjectMapper.selectByCode(joinSubjectDTO.getSubjectCode());
-        if(subjectId!=null){
-            Integer flag=subjectMapper.judgment(joinSubjectDTO.getUserId(),subjectId);
-            if(flag==0){
-                Integer join=subjectMapper.joinSubject(joinSubjectDTO.getUserId(),subjectId);
+        Integer subjectId = subjectMapper.selectByCode(joinSubjectDTO.getSubjectCode());
+        if (subjectId != null) {
+            Integer flag = subjectMapper.judgment(joinSubjectDTO.getUserId(), subjectId);
+            if (flag == 0) {
+                Date date = new Date();
+                Integer join = subjectMapper.joinSubject(joinSubjectDTO.getUserId(), subjectId, new Timestamp(date.getTime()));
                 return new RestResultBuilder<>().success(join);
-            }
-            else {
+            } else {
                 return new RestResultBuilder<>().error("已加入该课程");
             }
-        }
-        else{
+        } else {
             return new RestResultBuilder<>().error("课程不存在");
         }
     }

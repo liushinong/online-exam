@@ -36,31 +36,38 @@
         where id = #{id}
     </select>
     <select id="getSubjectByStuId" resultType="com.exam.onlineexamapi.domain.vo.student.SubjectVO">
-        select us.subject_id as id, s.name as name from t_user_subject as us, t_subject as s where us.subject_id = s.id and us.user_id = #{id}
+        select us.subject_id as id, s.name as name
+        from t_user_subject as us,
+             t_subject as s
+        where us.subject_id = s.id
+          and us.user_id = #{id}
     </select>
 
-    <delete id="deleteSubjectUser" >
-        delete From t_user_subject
-where user_id=#{userId} and subject_id=#{subjectId}
+    <delete id="deleteSubjectUser">
+        delete
+        From t_user_subject
+        where user_id = #{userId}
+          and subject_id = #{subjectId}
     </delete>
 
     <select id="selectByCode" resultType="integer">
 
-    SELECT s.id
-    FROM t_subject as s
-    WHERE s.subject_code=#{subjectCode}
+        SELECT s.id
+        FROM t_subject as s
+        WHERE s.subject_code = #{subjectCode}
 
     </select>
-    <insert id="joinSubject" >
-    INSERT INTO t_user_subject(user_id,subject_id)
-    VALUES(#{userId},#{subjectId})
+    <insert id="joinSubject">
+        INSERT INTO t_user_subject(user_id, subject_id, create_time)
+        VALUES (#{userId}, #{subjectId}, #{createTime})
 
     </insert>
 
     <select id="judgment" resultType="integer">
 
-    SELECT COUNT(id) as flag
-    FROM t_user_subject
-    WHERE user_id=#{userId} and subject_id=#{subjectId}
+        SELECT COUNT(id) as flag
+        FROM t_user_subject
+        WHERE user_id = #{userId}
+          and subject_id = #{subjectId}
     </select>
 </mapper>
