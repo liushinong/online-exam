@@ -11,15 +11,10 @@
     <github-corner class="github-corner" />
 
     <panel-group @handleSetLineChartData="handleSetLineChartData" />
-
-    <el-form
-      style="background: #fff; padding: 16px 16px 0; margin-bottom: 32px"
-      inline="true"
-    >
-      <el-form-item> <pie-chart></pie-chart></el-form-item>
-
-      <el-form-item><line-chart /></el-form-item>
-    </el-form>
+    <div style="display: flex; align-items: center">
+      <pie-chart style="width: 45%"></pie-chart>
+      <line-chart :chartData="lineChartData" />
+    </div>
   </div>
 </template>
 
