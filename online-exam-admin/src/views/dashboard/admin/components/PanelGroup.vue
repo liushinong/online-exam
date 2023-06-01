@@ -70,35 +70,35 @@
 </template>
 
 <script>
-import CountTo from "vue-count-to";
-import { selectAll } from "@/api/user";
+import CountTo from 'vue-count-to'
+import { selectAll } from '@/api/user'
 
 export default {
   components: {
-    CountTo,
+    CountTo
   },
   data() {
     return {
       questionNum: 0,
       subjectNum: 0,
       studentNum: 0,
-      paperNum: 0,
-    };
+      paperNum: 0
+    }
   },
   created() {
-    selectAll(localStorage.getItem("teacherId")).then((res) => {
-      this.questionNum = res.data.data.questionNum;
-      this.subjectNum = res.data.data.subjectNum;
-      this.studentNum = res.data.data.studentNum;
-      this.paperNum = res.data.data.paperNum;
-    });
+    selectAll(localStorage.getItem('teacherId')).then((res) => {
+      this.questionNum = res.data.data.questionNum
+      this.subjectNum = res.data.data.subjectNum
+      this.studentNum = res.data.data.studentNum
+      this.paperNum = res.data.data.paperNum
+    })
   },
   methods: {
     handleSetLineChartData(type) {
-      this.$emit("handleSetLineChartData", type);
-    },
-  },
-};
+      this.$emit('handleSetLineChartData', type)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

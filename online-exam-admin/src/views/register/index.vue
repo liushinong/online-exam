@@ -102,53 +102,53 @@
 </template>
 
 <script>
-import LangSelect from "@/components/LangSelect";
-import { register } from "@/api/user";
+import LangSelect from '@/components/LangSelect'
+import { register } from '@/api/user'
 export default {
-  name: "Login",
+  name: 'Login',
   components: { LangSelect },
   data() {
     const validatePassword = (rule, value, callback) => {
       if (value.length < 3) {
-        callback(new Error("The password can not be less than 6 digits"));
+        callback(new Error('The password can not be less than 6 digits'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       loginForm: {
-        username: "admin",
-        password: "admin",
-        role: 2,
+        username: 'admin',
+        password: 'admin',
+        role: 2
       },
-      passwordType: "password",
+      passwordType: 'password',
       capsTooltip: false,
       loading: false,
       redirect: undefined,
       otherQuery: {},
-      confirmPwd: "",
-    };
+      confirmPwd: ''
+    }
   },
   watch: {
     $route: {
-      handler: function (route) {
-        const query = route.query;
+      handler: function(route) {
+        const query = route.query
         if (query) {
-          this.redirect = query.redirect;
-          this.otherQuery = this.getOtherQuery(query);
+          this.redirect = query.redirect
+          this.otherQuery = this.getOtherQuery(query)
         }
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   created() {
     // window.addEventListener('storage', this.afterQRScan)
   },
   mounted() {
-    if (this.loginForm.username === "") {
-      this.$refs.username.focus();
-    } else if (this.loginForm.password === "") {
-      this.$refs.password.focus();
+    if (this.loginForm.username === '') {
+      this.$refs.username.focus()
+    } else if (this.loginForm.password === '') {
+      this.$refs.password.focus()
     }
   },
   destroyed() {
@@ -156,44 +156,44 @@ export default {
   },
   methods: {
     checkCapslock(e) {
-      const { key } = e;
-      this.capsTooltip = key && key.length === 1 && key >= "A" && key <= "Z";
+      const { key } = e
+      this.capsTooltip = key && key.length === 1 && key >= 'A' && key <= 'Z'
     },
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
+        this.$refs.password.focus()
+      })
     },
     handleLogin() {
-      this.loading = true;
+      this.loading = true
       if (this.loginForm.password == this.confirmPwd) {
         register(this.loginForm).then((res) => {
           if (res.code == 0) {
-            this.$message.success("注册成功");
-            this.$router.push({ path: "/login" });
+            this.$message.success('注册成功')
+            this.$router.push({ path: '/login' })
           } else {
-            this.$message.error("注册失败");
+            this.$message.error('注册失败')
           }
-        });
+        })
       } else {
-        this.$message.error("两次密码不一致");
+        this.$message.error('两次密码不一致')
       }
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
-        if (cur !== "redirect") {
-          acc[cur] = query[cur];
+        if (cur !== 'redirect') {
+          acc[cur] = query[cur]
         }
-        return acc;
-      }, {});
-    },
-  },
-};
+        return acc
+      }, {})
+    }
+  }
+}
 </script>
 
 <style lang="scss">
